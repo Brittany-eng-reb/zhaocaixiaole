@@ -366,6 +366,25 @@ textarea{padding:12px 14px;resize:none;min-height:80px;line-height:1.6;}
 .info-row .info-label{font-size:13px;color:var(--text-sub);}
 .info-row .info-value{font-size:13px;color:var(--text-dark);font-weight:500;text-align:right;flex:1;margin-left:14px;}
 
+/* 英语学习：左侧分栏子导航(主从布局) */
+.eng-layout{display:flex;gap:8px;align-items:flex-start;}
+.eng-nav{display:flex;flex-direction:column;gap:6px;flex:0 0 78px;}
+.eng-nav-item{padding:12px 4px;border-radius:12px;background:#fff;text-align:center;font-size:11px;font-weight:600;color:var(--text-sub);box-shadow:0 1px 4px rgba(0,0,0,0.05);cursor:pointer;border:1.5px solid transparent;line-height:1.3;transition:all .2s;}
+.eng-nav-item.active{background:linear-gradient(135deg,#FFF8E1,#FFECB3);color:#E65100;border-color:#FFD180;}
+.eng-nav-item .ei-ic{font-size:19px;display:block;margin-bottom:3px;}
+.eng-content{flex:1;min-width:0;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+@media(max-width:340px){.eng-nav{flex-basis:70px;}.eng-nav-item{font-size:10px;padding:10px 2px;}}
+/* 护肤打卡 */
+.skin-card{background:linear-gradient(135deg,#FCE4EC,#F8BBD0);margin-bottom:10px;border-radius:14px;padding:14px;}
+.skin-title{font-size:15px;font-weight:700;color:#AD1457;}
+.skin-streak{font-size:12px;color:#AD1457;margin-top:4px;}
+.skin-step{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;background:#fff;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,0.05);cursor:pointer;border:1.5px solid transparent;transition:all .2s;}
+.skin-step.done{background:#E8F5E9;border-color:#A5D6A7;}
+.skin-step .ss-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--warm-gray);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;transition:all .2s;}
+.skin-step.done .ss-check{background:#4CAF50;border-color:#4CAF50;}
+.skin-routine-h{font-size:14px;font-weight:700;color:#333;margin:4px 0 8px;display:flex;justify-content:space-between;align-items:center;}
+.skin-bar{height:6px;background:#FCE4EC;border-radius:3px;overflow:hidden;margin:8px 0;}
+.skin-bar>i{display:block;height:100%;background:linear-gradient(90deg,#F48FB1,#EC407A);border-radius:3px;transition:width .3s;}
 </style>
 </head>
 <body>
@@ -610,7 +629,8 @@ var NAV=[
   {id:"outfit",name:"穿搭学习",icon:'<svg viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>'},
   {id:"media",name:"优质自媒体",icon:'<svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>'},
   {id:"exercise",name:"运动打卡",icon:'<svg viewBox="0 0 24 24"><path d="M6.5 6.5h11l-2 11h-7z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="3" r="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 17.5v3M16 17.5v3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>'},
-  {id:"calligraphy",name:"书法练字",icon:'<svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M2 2l7.586 7.586" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="11" cy="11" r="2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>'}
+  {id:"calligraphy",name:"书法练字",icon:'<svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M2 2l7.586 7.586" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="11" cy="11" r="2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>'},
+  {id:"skincare",name:"护肤打卡",icon:'<svg viewBox="0 0 24 24"><path d="M12 2.5S5 10 5 14a7 7 0 0 0 14 0c0-4-7-11.5-7-11.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 14a2.5 2.5 0 0 0 5 0" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>'}
 ];
 
 var cur="welcome",curSub={};
@@ -647,7 +667,7 @@ function navigateTo(id){
   renderNav();
   var ct=$("content");ct.innerHTML="";
   var d=document.createElement("div");d.className="page active";ct.appendChild(d);
-  var R={welcome:rWelcome,about:rAbout,todo:rTodo,english:rEnglish,reading:rReading,finance:rFinance,news:rNews,outfit:rOutfit,media:rMedia,exercise:rExercise,calligraphy:rCalligraphy};
+  var R={welcome:rWelcome,about:rAbout,todo:rTodo,english:rEnglish,reading:rReading,finance:rFinance,news:rNews,outfit:rOutfit,media:rMedia,exercise:rExercise,calligraphy:rCalligraphy,skincare:rSkincare};
   if(R[id])R[id](d);
   closeNav();ct.scrollTop=0;
   tryFeedPet(id);
@@ -982,17 +1002,68 @@ function aiOpt(){
   },1500);
 }
 
-/* ===== 英语 ===== */
+/* ===== 英语（左侧分栏子导航） ===== */
+var ENG_TABS=[
+  {id:"words",ic:"📖",name:"每日单词"},
+  {id:"phonemes",ic:"🎵",name:"国际音标"},
+  {id:"record",ic:"🎤",name:"语音视频"},
+  {id:"records",ic:"📋",name:"学习记录"}
+];
 function rEnglish(ct){
+  if(!curSub.english)curSub.english="words";
   var ls=Store.get("englishLogs",[]),tm=0;
   for(var i=0;i<ls.length;i++)tm+=Number(ls[i].minutes||0);
-  var td=todayKey(),tdl=[],tdm=0;
-  for(var i=0;i<ls.length;i++){if(ls[i].date===td){tdl.push(ls[i]);tdm+=Number(ls[i].minutes||0);}}
+  var td=todayKey(),tdm=0;
+  for(var i=0;i<ls.length;i++){if(ls[i].date===td)tdm+=Number(ls[i].minutes||0);}
   var ud={};
   for(var i=0;i<ls.length;i++)ud[ls[i].date]=1;
   var uDays=Object.keys(ud).length;
   var mediaRecs=Store.get("englishMedia",[]);
-  var listHtml="";
+  var nav="";
+  for(var i=0;i<ENG_TABS.length;i++){
+    nav+='<div class="eng-nav-item'+(ENG_TABS[i].id===curSub.english?" active":"")+'" onclick="swEnglishTab(\''+ENG_TABS[i].id+'\')"><span class="ei-ic">'+ENG_TABS[i].ic+'</span>'+ENG_TABS[i].name+'</div>';
+  }
+  ct.innerHTML='<div class="stat-grid"><div class="stat-card"><div class="s-num">'+(tm/60).toFixed(1)+'h</div><div class="s-label">累计学习</div></div><div class="stat-card"><div class="s-num">'+tdm+'min</div><div class="s-label">今日学习</div></div><div class="stat-card"><div class="s-num">'+(ls.length+mediaRecs.length)+'</div><div class="s-label">记录条数</div></div><div class="stat-card"><div class="s-num">'+uDays+'</div><div class="s-label">学习天数</div></div></div><div class="eng-layout"><div class="eng-nav">'+nav+'</div><div class="eng-content" id="engContent"></div></div>';
+  rEnglishContent();
+}
+function swEnglishTab(id){
+  curSub.english=id;
+  var els=document.querySelectorAll(".eng-nav-item");
+  for(var i=0;i<els.length;i++){els[i].classList.toggle("active",ENG_TABS[i].id===id);}
+  rEnglishContent();
+}
+function refreshEnglishView(){
+  var els=document.querySelectorAll(".eng-nav-item");
+  for(var i=0;i<els.length;i++){els[i].classList.toggle("active",ENG_TABS[i].id===curSub.english);}
+  rEnglishContent();
+}
+function rEnglishContent(){
+  var el=document.getElementById("engContent");if(!el)return;
+  var id=curSub.english;
+  if(id==="words"){
+    el.innerHTML='<div class="card" style="background:linear-gradient(135deg,#FFF8E1,#FFECB3);"><div class="card-title" style="color:#E65100;"><span style="font-size:18px;">📖</span> 外研版三上 · 每日单词打卡</div><div style="font-size:12px;color:#5D4037;margin-bottom:12px;">孙有中主编 · 三年级起点 · 三年级上册单词表</div><div id="wordCheckinArea">'+renderWordCheckin()+'</div></div>';
+  } else if(id==="phonemes"){
+    el.innerHTML='<div class="card" style="background:linear-gradient(135deg,#E3F2FD,#BBDEFB);"><div class="card-title" style="color:#1565C0;"><span style="font-size:18px;">🎵</span> 国际音标 · 每日打卡</div><div style="font-size:12px;color:#1565C0;margin-bottom:12px;font-weight:600;">48个音标（20元音+28辅音）· 每日'+PHONEME_DAILY_COUNT+'个 · 雪梨老师自然拼读基础</div><div id="phonemeCheckinArea">'+renderPhonemeCheckin()+'</div></div>';
+  } else if(id==="record"){
+    el.innerHTML=engRecordHtml();
+  } else {
+    el.innerHTML='<div class="section-title"><span class="dot"></span>全部记录</div>'+renderEngRecordsList();
+  }
+}
+function engRecordHtml(){
+  return '<div class="recorder-section"><div class="card-title"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" stroke-width="2"/></svg>🎤 语音/视频打卡</div>'+
+    '<div style="font-size:12px;color:var(--text-sub);margin-bottom:10px;">跟着雪梨老师学音标/自然拼读，录下你的发音，随时回听复习！</div>'+
+    '<div class="recorder-type-switch"><div class="recorder-type-btn active" id="rtAudio" onclick="switchRecType(\'audio\')">🎤 语音录制</div><div class="recorder-type-btn" id="rtVideo" onclick="switchRecType(\'video\')">📹 视频录制</div></div>'+
+    '<div id="recorderArea"><div class="recorder-controls"><button class="recorder-btn" id="recBtn" onclick="toggleRec()">🎤</button><span class="recorder-timer" id="recTimer">00:00</span><span id="recStatus" style="font-size:12px;color:var(--text-sub);">点击开始录制</span></div><div class="recorder-preview" id="recPreview"><div class="placeholder">录制完成后这里可预览</div></div></div>'+
+    '<div class="form-group" style="margin-top:12px;"><label>学习项目</label><select id="engItem" style="width:100%;height:40px;border-radius:10px;border:1.5px solid var(--warm-gray);padding:0 12px;font-size:13px;background:#fff;"><option value="音标">音标</option><option value="自然拼读">自然拼读</option><option value="课堂口语">课堂口语</option><option value="教案备课">教案备课</option><option value="优质课学习">优质课学习</option><option value="外研版教材培训">外研版教材培训</option><option value="新课标研读">新课标研读</option><option value="英语教学法">英语教学法</option><option value="听力训练">听力训练</option><option value="词汇积累">词汇积累</option><option value="语法专项">语法专项</option><option value="英文阅读">英文阅读</option><option value="TED学习">TED学习</option><option value="英语论文写作">英语论文写作</option><option value="雅思/托福备考">雅思/托福备考</option></select></div>'+
+    '<div class="form-group"><label>练习时长（分钟）</label><input type="number" id="engMin" placeholder="如 15" min="1"></div>'+
+    '<div class="form-group"><label>练习内容/笔记（如：跟读/iː/ /ɪ/ 音标，雪梨老师第3课）</label><textarea id="engNote" style="min-height:50px;" placeholder="记录了方便以后复习..."></textarea></div>'+
+    '<button class="btn btn-block btn-sm" onclick="saveEngMedia()" id="saveEngBtn">💾 保存打卡记录</button>'+
+    '<p style="font-size:11px;color:var(--text-light);text-align:center;margin-top:6px;">录制语音或视频后，填写信息点击保存。所有媒体存储在手机本地。</p></div>'+
+    '<div class="card"><div class="card-title"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" fill="none" stroke="currentColor" stroke-width="2"/></svg>纯文字记录</div><div class="form-group"><label>项目</label><select id="engItem2" style="width:100%;height:40px;border-radius:10px;border:1.5px solid var(--warm-gray);padding:0 12px;font-size:13px;background:#fff;"><option value="音标">音标</option><option value="自然拼读">自然拼读</option><option value="课堂口语">课堂口语</option><option value="教案备课">教案备课</option><option value="优质课学习">优质课学习</option><option value="外研版教材培训">外研版教材培训</option><option value="新课标研读">新课标研读</option><option value="英语教学法">英语教学法</option><option value="听力训练">听力训练</option><option value="词汇积累">词汇积累</option><option value="语法专项">语法专项</option><option value="英文阅读">英文阅读</option><option value="TED学习">TED学习</option><option value="英语论文写作">英语论文写作</option><option value="雅思/托福备考">雅思/托福备考</option></select></div><div class="form-group"><label>时长（分钟）</label><input type="number" id="engMin2" placeholder="如 30" min="1"></div><div class="form-group"><label>笔记</label><textarea id="engNote2" style="min-height:60px;" placeholder="今天学到了什么？"></textarea></div><button class="btn btn-block btn-sm" onclick="saveEng()">保存文字记录</button></div>';
+}
+function renderEngRecordsList(){
+  var ls=Store.get("englishLogs",[]),mediaRecs=Store.get("englishMedia",[]),listHtml="";
   if(ls.length===0&&mediaRecs.length===0)listHtml='<div class="empty-state">还没有记录</div>';
   else{
     var allRecs=[];
@@ -1009,24 +1080,9 @@ function rEnglish(ct){
       }
     }
   }
-  ct.innerHTML='<div class="stat-grid"><div class="stat-card"><div class="s-num">'+(tm/60).toFixed(1)+'h</div><div class="s-label">累计学习</div></div><div class="stat-card"><div class="s-num">'+tdm+'min</div><div class="s-label">今日学习</div></div><div class="stat-card"><div class="s-num">'+(ls.length+mediaRecs.length)+'</div><div class="s-label">记录条数</div></div><div class="stat-card"><div class="s-num">'+uDays+'</div><div class="s-label">学习天数</div></div>'+
-    '<!-- 单词打卡 -->'+
-    '<div class="card" style="background:linear-gradient(135deg,#FFF8E1,#FFECB3);"><div class="card-title" style="color:#E65100;"><span style="font-size:18px;">📖</span> 外研版三上 · 每日单词打卡</div><div style="font-size:12px;color:#5D4037;margin-bottom:12px;">孙有中主编 · 三年级起点 · 三年级上册单词表</div><div id="wordCheckinArea">'+renderWordCheckin()+'</div></div>'+
-    /* 音标打卡卡片 */
-    '<div class="card" style="background:linear-gradient(135deg,#E3F2FD,#BBDEFB);"><div class="card-title" style="color:#1565C0;"><span style="font-size:18px;">🎵</span> 国际音标 · 每日打卡</div><div style="font-size:12px;color:#1565C0;margin-bottom:12px;font-weight:600;">48个音标（20元音+28辅音）· 每日'+PHONEME_DAILY_COUNT+'个 · 雪梨老师自然拼读基础</div><div id="phonemeCheckinArea">'+renderPhonemeCheckin()+'</div></div>'+
-    '<!-- 语音/视频打卡 -->'+
-    '<div class="recorder-section"><div class="card-title"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" stroke-width="2"/></svg>🎤 语音/视频打卡</div>'+
-    '<div style="font-size:12px;color:var(--text-sub);margin-bottom:10px;">跟着雪梨老师学音标/自然拼读，录下你的发音，随时回听复习！</div>'+
-    '<div class="recorder-type-switch"><div class="recorder-type-btn active" id="rtAudio" onclick="switchRecType(\'audio\')">🎤 语音录制</div><div class="recorder-type-btn" id="rtVideo" onclick="switchRecType(\'video\')">📹 视频录制</div></div>'+
-    '<div id="recorderArea"><div class="recorder-controls"><button class="recorder-btn" id="recBtn" onclick="toggleRec()">🎤</button><span class="recorder-timer" id="recTimer">00:00</span><span id="recStatus" style="font-size:12px;color:var(--text-sub);">点击开始录制</span></div><div class="recorder-preview" id="recPreview"><div class="placeholder">录制完成后这里可预览</div></div></div>'+
-    '<div class="form-group" style="margin-top:12px;"><label>学习项目</label><select id="engItem" style="width:100%;height:40px;border-radius:10px;border:1.5px solid var(--warm-gray);padding:0 12px;font-size:13px;background:#fff;"><option value="音标">音标</option><option value="自然拼读">自然拼读</option><option value="课堂口语">课堂口语</option><option value="教案备课">教案备课</option><option value="优质课学习">优质课学习</option><option value="外研版教材培训">外研版教材培训</option><option value="新课标研读">新课标研读</option><option value="英语教学法">英语教学法</option><option value="听力训练">听力训练</option><option value="词汇积累">词汇积累</option><option value="语法专项">语法专项</option><option value="英文阅读">英文阅读</option><option value="TED学习">TED学习</option><option value="英语论文写作">英语论文写作</option><option value="雅思/托福备考">雅思/托福备考</option></select></div>'+
-    '<div class="form-group"><label>练习时长（分钟）</label><input type="number" id="engMin" placeholder="如 15" min="1"></div>'+
-    '<div class="form-group"><label>练习内容/笔记（如：跟读/iː/ /ɪ/ 音标，雪梨老师第3课）</label><textarea id="engNote" style="min-height:50px;" placeholder="记录了方便以后复习..."></textarea></div>'+
-    '<button class="btn btn-block btn-sm" onclick="saveEngMedia()" id="saveEngBtn">💾 保存打卡记录</button>'+
-    '<p style="font-size:11px;color:var(--text-light);text-align:center;margin-top:6px;">录制语音或视频后，填写信息点击保存。所有媒体存储在手机本地。</p></div>'+
-    '<div class="card"><div class="card-title"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" fill="none" stroke="currentColor" stroke-width="2"/></svg>纯文字记录</div><div class="form-group"><label>项目</label><select id="engItem2" style="width:100%;height:40px;border-radius:10px;border:1.5px solid var(--warm-gray);padding:0 12px;font-size:13px;background:#fff;"><option value="音标">音标</option><option value="自然拼读">自然拼读</option><option value="课堂口语">课堂口语</option><option value="教案备课">教案备课</option><option value="优质课学习">优质课学习</option><option value="外研版教材培训">外研版教材培训</option><option value="新课标研读">新课标研读</option><option value="英语教学法">英语教学法</option><option value="听力训练">听力训练</option><option value="词汇积累">词汇积累</option><option value="语法专项">语法专项</option><option value="英文阅读">英文阅读</option><option value="TED学习">TED学习</option><option value="英语论文写作">英语论文写作</option><option value="雅思/托福备考">雅思/托福备考</option></select></div><div class="form-group"><label>时长（分钟）</label><input type="number" id="engMin2" placeholder="如 30" min="1"></div><div class="form-group"><label>笔记</label><textarea id="engNote2" style="min-height:60px;" placeholder="今天学到了什么？"></textarea></div><button class="btn btn-block btn-sm" onclick="saveEng()">保存文字记录</button></div>'+
-    '<div class="section-title"><span class="dot"></span>全部记录</div>'+listHtml;
+  return listHtml;
 }
+
 
 var recMediaRecorder=null,recStream=null,recType="audio",recBlob=null,recBlobUrl=null,recSeconds=0,recInterval=null;
 
@@ -1121,7 +1177,7 @@ function saveEngMedia(){
     document.getElementById("recStatus").textContent="点击开始录制";
     document.getElementById("recStatus").style.color="var(--text-sub)";
     document.getElementById("saveEngBtn").style.opacity="1";
-    navigateTo("english");toast("打卡成功！🎉");feedPet("english");
+    curSub.english="records";refreshEnglishView();toast("打卡成功！🎉");feedPet("english");
   };
   reader.readAsDataURL(recBlob);
 }
@@ -1132,7 +1188,7 @@ function delEngMedia(i){
     if(recs[i].blobUrl)URL.revokeObjectURL(recs[i].blobUrl);
     recs.splice(i,1);
     Store.set("englishMedia",recs);
-    navigateTo("english");toast("已删除");
+    refreshEnglishView();toast("已删除");
   }
 }
 
@@ -1141,7 +1197,84 @@ function saveEng(){
   if(!m||m<=0){toast("请输入时长");return;}
   var ls=Store.get("englishLogs",[]);
   ls.push({date:todayKey(),item:it,minutes:Number(m),note:n,created:Date.now()});
-  Store.set("englishLogs",ls);navigateTo("english");toast("已记录");feedPet("english");
+  Store.set("englishLogs",ls);curSub.english="records";refreshEnglishView();toast("已记录");feedPet("english");
+}
+
+
+/* ===== 护肤打卡 ===== */
+var SKIN_MORNING=["清洁洁面","爽肤水","精华液","眼霜","乳液/面霜","防晒"];
+var SKIN_EVENING=["卸妆","洁面","爽肤水","精华液","眼霜","晚霜"];
+function skinKeyOf(d){return d.toISOString().slice(0,10);}
+function rSkincare(ct){
+  if(!curSub.skincare)curSub.skincare="morning";
+  var td=todayKey();
+  var data=Store.get("skincare",{});
+  if(!data[td])data[td]={morning:{},evening:{},mask:false};
+  var today=data[td];
+  /* 连续打卡天数(从今天往前，凡当天有任意一步或面膜即算) */
+  var streak=0,dd=new Date(td+"T00:00:00Z");
+  while(data[skinKeyOf(dd)]){
+    var rr=data[skinKeyOf(dd)];
+    var any=(rr.morning&&Object.keys(rr.morning).length>0)||(rr.evening&&Object.keys(rr.evening).length>0)||!!rr.mask;
+    if(any)streak++;else break;
+    dd.setUTCDate(dd.getUTCDate()-1);
+  }
+  var isMorning=curSub.skincare==="morning";
+  var steps=isMorning?SKIN_MORNING:SKIN_EVENING;
+  var rec=today[curSub.skincare]||{};
+  var done=0;
+  for(var i=0;i<steps.length;i++){if(rec[steps[i]])done++;}
+  var pct=Math.round(done/steps.length*100);
+  var tabHtml='<div class="sub-tabs" style="justify-content:center;gap:8px;margin-bottom:12px;">'+
+    '<div class="sub-tab'+(isMorning?" active":"")+'" onclick="swSkinTab(\'morning\')">🌞 早间护肤</div>'+
+    '<div class="sub-tab'+(!isMorning?" active":"")+'" onclick="swSkinTab(\'evening\')">🌙 晚间护肤</div></div>';
+  var stepsHtml="";
+  for(var i=0;i<steps.length;i++){
+    var on=!!rec[steps[i]];
+    stepsHtml+='<div class="skin-step'+(on?" done":"")+'" onclick="toggleSkinStep(\''+curSub.skincare+'\',\''+steps[i].replace(/'/g,"\\'")+'\')"><span class="ss-check">'+(on?"✓":"")+'</span><span class="ss-name">'+steps[i]+'</span></div>';
+  }
+  var maskOn=!!today.mask;
+  ct.innerHTML=
+    '<div class="skin-card"><div class="skin-title">'+(isMorning?"🌞 早间护肤日程":"🌙 晚间护肤日程")+'</div>'+
+    '<div class="skin-streak">🔥 连续打卡 '+streak+' 天 · 今日已完成 '+done+'/'+steps.length+' 步</div>'+
+    '<div class="skin-bar"><i style="width:'+pct+'%"></i></div></div>'+
+    tabHtml+
+    '<div class="skin-routine-h">'+(isMorning?"早间":"晚间")+'护肤流程</div>'+
+    stepsHtml+
+    '<div class="skin-step'+(maskOn?" done":"")+'" style="margin-top:10px;" onclick="toggleSkinMask()"><span class="ss-check">'+(maskOn?"✓":"")+'</span><span class="ss-name">🧖 今天敷面膜</span></div>'+
+    '<button class="btn btn-block btn-sm btn-outline" style="margin-top:14px;font-size:12px;" onclick="resetSkinToday()">↺ 重置今日打卡</button>';
+}
+function swSkinTab(which){
+  curSub.skincare=which;
+  navigateTo("skincare");
+}
+function toggleSkinStep(routine,step){
+  var td=todayKey(),data=Store.get("skincare",{});
+  if(!data[td])data[td]={morning:{},evening:{},mask:false};
+  if(!data[td][routine])data[td][routine]={};
+  data[td][routine][step]=!data[td][routine][step];
+  Store.set("skincare",data);
+  var anyDone=false;
+  for(var k in data[td]){
+    if(k==="mask"){if(data[td].mask)anyDone=true;}
+    else if(data[td][k]&&Object.keys(data[td][k]).length>0)anyDone=true;
+  }
+  if(anyDone)feedPet("skincare");
+  navigateTo("skincare");
+}
+function toggleSkinMask(){
+  var td=todayKey(),data=Store.get("skincare",{});
+  if(!data[td])data[td]={morning:{},evening:{},mask:false};
+  data[td].mask=!data[td].mask;
+  Store.set("skincare",data);
+  if(data[td].mask)feedPet("skincare");
+  navigateTo("skincare");
+}
+function resetSkinToday(){
+  var td=todayKey(),data=Store.get("skincare",{});
+  data[td]={morning:{},evening:{},mask:false};
+  Store.set("skincare",data);
+  navigateTo("skincare");toast("已重置今日");
 }
 
 /* ===== 单词打卡数据 ===== */
