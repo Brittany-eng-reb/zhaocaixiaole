@@ -1012,6 +1012,8 @@ function rEnglish(ct){
   ct.innerHTML='<div class="stat-grid"><div class="stat-card"><div class="s-num">'+(tm/60).toFixed(1)+'h</div><div class="s-label">累计学习</div></div><div class="stat-card"><div class="s-num">'+tdm+'min</div><div class="s-label">今日学习</div></div><div class="stat-card"><div class="s-num">'+(ls.length+mediaRecs.length)+'</div><div class="s-label">记录条数</div></div><div class="stat-card"><div class="s-num">'+uDays+'</div><div class="s-label">学习天数</div></div>'+
     '<!-- 单词打卡 -->'+
     '<div class="card" style="background:linear-gradient(135deg,#FFF8E1,#FFECB3);"><div class="card-title" style="color:#E65100;"><span style="font-size:18px;">📖</span> 外研版三上 · 每日单词打卡</div><div style="font-size:12px;color:#5D4037;margin-bottom:12px;">孙有中主编 · 三年级起点 · 三年级上册单词表</div><div id="wordCheckinArea">'+renderWordCheckin()+'</div></div>'+
+    /* 音标打卡卡片 */
+    '<div class="card" style="background:linear-gradient(135deg,#E3F2FD,#BBDEFB);"><div class="card-title" style="color:#1565C0;"><span style="font-size:18px;">🎵</span> 国际音标 · 每日打卡</div><div style="font-size:12px;color:#1565C0;margin-bottom:12px;font-weight:600;">48个音标（20元音+28辅音）· 每日'+PHONEME_DAILY_COUNT+'个 · 雪梨老师自然拼读基础</div><div id="phonemeCheckinArea">'+renderPhonemeCheckin()+'</div></div>'+
     '<!-- 语音/视频打卡 -->'+
     '<div class="recorder-section"><div class="card-title"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" stroke-width="2"/></svg>🎤 语音/视频打卡</div>'+
     '<div style="font-size:12px;color:var(--text-sub);margin-bottom:10px;">跟着雪梨老师学音标/自然拼读，录下你的发音，随时回听复习！</div>'+
@@ -1144,208 +1146,208 @@ function saveEng(){
 
 /* ===== 单词打卡数据 ===== */
 var WORD_BANK=[
-  {word:"welcome",phonetic:"/welkəm/",cn:"欢迎",spell:"wel-come",module:"Welcome"},
-  {word:"to",phonetic:"/tuː/",cn:"用于动词、名词或形容词后，使意思完整；向，到，往",spell:"t-o",module:"Welcome"},
-  {word:"school",phonetic:"/skuːl/",cn:"学校",spell:"s-ch-ool",module:"Welcome"},
-  {word:"hi",phonetic:"/haɪ/",cn:"嘿，喂，你好",spell:"hi",module:"Welcome"},
-  {word:"I",phonetic:"/aɪ/",cn:"我",spell:"I",module:"Welcome"},
-  {word:"be",phonetic:"/biː/",cn:"是",spell:"b-e",module:"Welcome"},
-  {word:"what",phonetic:"/wɒt/",cn:"什么",spell:"wh-at",module:"Welcome"},
-  {word:"your",phonetic:"/jɔː/",cn:"你的；你们的",spell:"y-our",module:"Welcome"},
-  {word:"name",phonetic:"/neɪm/",cn:"名字",spell:"n-a-me",module:"Welcome"},
-  {word:"hello",phonetic:"/hə'ləʊ/",cn:"喂，哈啰，你好",spell:"he-llo",module:"Welcome"},
-  {word:"my",phonetic:"/maɪ/",cn:"我的",spell:"m-y",module:"Welcome"},
-  {word:"goodbye",phonetic:"/ɡʊd'baɪ/",cn:"再见",spell:"good-bye",module:"Welcome"},
-  {word:"have",phonetic:"/hæv/",cn:"有，拥有",spell:"h-a-ve",module:"Welcome"},
-  {word:"a",phonetic:"/ə/",cn:"一（个）",spell:"a",module:"Welcome"},
-  {word:"nice",phonetic:"/naɪs/",cn:"令人愉快的",spell:"n-i-ce",module:"Welcome"},
-  {word:"day",phonetic:"/deɪ/",cn:"一天",spell:"d-ay",module:"Welcome"},
-  {word:"good",phonetic:"/ɡʊd/",cn:"好的",spell:"g-oo-d",module:"Welcome"},
-  {word:"morning",phonetic:"/'mɔːnɪŋ/",cn:"早晨，上午",spell:"mor-ning",module:"Welcome"},
-  {word:"Ms",phonetic:"/mɪz/",cn:"女士",spell:"M-s",module:"Welcome"},
-  {word:"stand",phonetic:"/stænd/",cn:"站立",spell:"st-a-nd",module:"Welcome"},
-  {word:"sit",phonetic:"/sɪt/",cn:"坐",spell:"s-i-t",module:"Welcome"},
-  {word:"open",phonetic:"/'əʊpən/",cn:"打开",spell:"o-pen",module:"Welcome"},
-  {word:"book",phonetic:"/bʊk/",cn:"书",spell:"b-oo-k",module:"Welcome"},
-  {word:"close",phonetic:"/kləʊz/",cn:"合上",spell:"cl-o-se",module:"Welcome"},
-  {word:"point",phonetic:"/pɔɪnt/",cn:"指",spell:"p-oi-nt",module:"Welcome"},
-  {word:"say",phonetic:"/seɪ/",cn:"说",spell:"s-ay",module:"Welcome"},
-  {word:"read",phonetic:"/riːd/",cn:"阅读",spell:"r-ea-d",module:"Welcome"},
-  {word:"listen",phonetic:"/'lɪsn/",cn:"听",spell:"li-sten",module:"Welcome"},
-  {word:"write",phonetic:"/raɪt/",cn:"写",spell:"wr-i-te",module:"Welcome"},
-  {word:"play",phonetic:"/pleɪ/",cn:"玩，玩耍",spell:"pl-ay",module:"Welcome"},
-  {word:"happy",phonetic:"/'hæpi/",cn:"高兴的，快乐的",spell:"ha-ppy",module:"Welcome"},
-  {word:"new",phonetic:"/njuː/",cn:"新的",spell:"n-ew",module:"Welcome"},
-  {word:"do",phonetic:"/duː/",cn:"构成疑问句或否定句；做",spell:"d-o",module:"Welcome"},
-  {word:"they",phonetic:"/ðeɪ/",cn:"他们",spell:"th-ey",module:"Welcome"},
-  {word:"everyone",phonetic:"/'evriwʌn/",cn:"每个人，人人",spell:"e-very-one",module:"Welcome"},
-  {word:"nine",phonetic:"/naɪn/",cn:"九",spell:"n-i-ne",module:"Welcome"},
-  {word:"she",phonetic:"/ʃiː/",cn:"她",spell:"sh-e",module:"Welcome"},
-  {word:"too",phonetic:"/tuː/",cn:"也",spell:"t-oo",module:"Welcome"},
-  {word:"we",phonetic:"/wiː/",cn:"我们",spell:"w-e",module:"Welcome"},
-  {word:"from",phonetic:"/frɒm/",cn:"从",spell:"fr-om",module:"Welcome"},
-  {word:"the",phonetic:"/ðə/",cn:"用于表示正在谈论一个已经提到过、已经知道，或是唯一存在的人或物",spell:"th-e",module:"Welcome"},
-  {word:"twin",phonetic:"/twɪn/",cn:"双胞胎中的一个",spell:"tw-i-n",module:"Welcome"},
-  {word:"he",phonetic:"/hiː/",cn:"他",spell:"h-e",module:"Welcome"},
-  {word:"come",phonetic:"/kʌm/",cn:"来；来到",spell:"c-o-me",module:"Welcome"},
-  {word:"and",phonetic:"/ænd/",cn:"然后，接着；和",spell:"a-nd",module:"Welcome"},
-  {word:"oh",phonetic:"/əʊ/",cn:"噢",spell:"oh",module:"Welcome"},
-  {word:"no",phonetic:"/nəʊ/",cn:"不，不行",spell:"n-o",module:"Welcome"},
-  {word:"help",phonetic:"/help/",cn:"帮助，帮忙",spell:"h-e-lp",module:"Welcome"},
-  {word:"here",phonetic:"/hɪə/",cn:"在这里",spell:"h-ere",module:"Welcome"},
-  {word:"thank",phonetic:"/θæŋk/",cn:"感谢，向……表示谢意",spell:"th-ank",module:"Welcome"},
-  {word:"together",phonetic:"/tə'ɡeðə/",cn:"一起，一块儿",spell:"to-ge-ther",module:"Welcome"},
-  {word:"OK",phonetic:"/əʊ'keɪ/",cn:"行，可以",spell:"O-K",module:"Welcome"},
-  {word:"great",phonetic:"/ɡreɪt/",cn:"极棒的，极好的",spell:"gr-ea-t",module:"Welcome"},
-  {word:"song",phonetic:"/sɒŋ/",cn:"歌曲",spell:"s-o-ng",module:"Welcome"},
-  {word:"dear",phonetic:"/dɪə/",cn:"亲爱的",spell:"d-ear",module:"Welcome"},
-  {word:"sing",phonetic:"/sɪŋ/",cn:"唱，歌唱",spell:"s-i-ng",module:"Welcome"},
-  {word:"now",phonetic:"/naʊ/",cn:"现在",spell:"n-ow",module:"Welcome"},
-  {word:"know",phonetic:"/nəʊ/",cn:"认识；知道，了解",spell:"kn-ow",module:"Welcome"},
-  {word:"our",phonetic:"/'aʊə/",cn:"我们的",spell:"ou-r",module:"Welcome"},
-  {word:"everybody",phonetic:"/'evribɒdi/",cn:"每个人，人人",spell:"e-very-bo-dy",module:"Welcome"},
-  {word:"with",phonetic:"/wɪð/",cn:"和……一起",spell:"w-i-th",module:"Welcome"},
-  {word:"me",phonetic:"/miː/",cn:"我",spell:"m-e",module:"Welcome"},
-  {word:"let's",phonetic:"/lets/",cn:"让我们",spell:"let's",module:"Unit1"},
-  {word:"friend",phonetic:"/frend/",cn:"朋友",spell:"f-ri-end",module:"Unit1"},
-  {word:"meet",phonetic:"/miːt/",cn:"认识，结识",spell:"m-ee-t",module:"Unit1"},
-  {word:"you",phonetic:"/juː/",cn:"你；你们",spell:"y-ou",module:"Unit1"},
-  {word:"pen",phonetic:"/pen/",cn:"钢笔",spell:"p-e-n",module:"Unit1"},
-  {word:"pencil",phonetic:"/'pensl/",cn:"铅笔",spell:"pen-cil",module:"Unit1"},
-  {word:"pencil case",phonetic:"/'pensl keɪs/",cn:"笔袋；铅笔盒",spell:"pen-cil case",module:"Unit1"},
-  {word:"bag",phonetic:"/bæɡ/",cn:"袋；包",spell:"b-a-g",module:"Unit1"},
-  {word:"for",phonetic:"/fɔː/",cn:"为了",spell:"f-or",module:"Unit1"},
-  {word:"ruler",phonetic:"/'ruːlə/",cn:"尺子，直尺",spell:"r-u-ler",module:"Unit1"},
-  {word:"eraser",phonetic:"/ɪ'reɪzə/",cn:"橡皮",spell:"e-ra-ser",module:"Unit1"},
-  {word:"this",phonetic:"/ðɪs/",cn:"这，这个",spell:"th-i-s",module:"Unit1"},
-  {word:"in",phonetic:"/ɪn/",cn:"在……里",spell:"i-n",module:"Unit1"},
-  {word:"schoolbag",phonetic:"/'skuːlbæɡ/",cn:"书包",spell:"school-bag",module:"Unit1"},
-  {word:"it",phonetic:"/ɪt/",cn:"它",spell:"i-t",module:"Unit1"},
-  {word:"not",phonetic:"/nɒt/",cn:"不，不是",spell:"n-o-t",module:"Unit1"},
-  {word:"that",phonetic:"/ðæt/",cn:"那，那个",spell:"th-a-t",module:"Unit1"},
-  {word:"yes",phonetic:"/jes/",cn:"是，对",spell:"y-e-s",module:"Unit1"},
-  {word:"guess",phonetic:"/ɡes/",cn:"猜，猜测",spell:"g-u-ess",module:"Unit1"},
-  {word:"find",phonetic:"/faɪnd/",cn:"发现，找到",spell:"f-i-nd",module:"Unit1"},
-  {word:"lost and found",phonetic:"/lɒst ənd faʊnd/",cn:"失物招领",spell:"lost and found",module:"Unit1"},
-  {word:"bye",phonetic:"/baɪ/",cn:"再见，拜拜",spell:"b-ye",module:"Unit1"},
-  {word:"kid",phonetic:"/kɪd/",cn:"小孩，儿童",spell:"k-i-d",module:"Unit1"},
-  {word:"take care of",phonetic:"/teɪk keə ɒv/",cn:"照看（照料）某人/某物",spell:"take care of",module:"Unit1"},
-  {word:"there",phonetic:"/ðeə/",cn:"在那里",spell:"th-ere",module:"Unit1"},
-  {word:"please",phonetic:"/pliːz/",cn:"请",spell:"pl-ea-se",module:"Unit1"},
-  {word:"back",phonetic:"/bæk/",cn:"回到原处",spell:"b-a-ck",module:"Unit1"},
-  {word:"come back",phonetic:"/kʌm bæk/",cn:"回来",spell:"come back",module:"Unit1"},
-  {word:"look",phonetic:"/lʊk/",cn:"看，瞧，望",spell:"l-oo-k",module:"Unit1"},
-  {word:"thing",phonetic:"/θɪŋ/",cn:"东西",spell:"th-i-ng",module:"Unit2"},
-  {word:"pack",phonetic:"/pæk/",cn:"收拾好",spell:"p-a-ck",module:"Unit2"},
-  {word:"colour",phonetic:"/'kʌlə/",cn:"颜色",spell:"c-o-lour",module:"Unit2"},
-  {word:"can",phonetic:"/kæn/",cn:"能，会",spell:"c-a-n",module:"Unit2"},
-  {word:"see",phonetic:"/siː/",cn:"看见，看到",spell:"s-ee",module:"Unit2"},
-  {word:"right",phonetic:"/raɪt/",cn:"正确的，对的",spell:"r-i-ght",module:"Unit2"},
-  {word:"first",phonetic:"/fɜːst/",cn:"第一的",spell:"f-ir-st",module:"Unit2"},
-  {word:"magical",phonetic:"/'mædʒɪkl/",cn:"神奇的；有魔力的",spell:"ma-gi-cal",module:"Unit2"},
-  {word:"fun",phonetic:"/fʌn/",cn:"有趣的，逗乐的",spell:"f-u-n",module:"Unit2"},
-  {word:"black",phonetic:"/blæk/",cn:"黑色（的）",spell:"bl-a-ck",module:"Unit2"},
-  {word:"so",phonetic:"/səʊ/",cn:"这么，如此",spell:"s-o",module:"Unit2"},
-  {word:"many",phonetic:"/'meni/",cn:"许多；大量",spell:"m-a-ny",module:"Unit2"},
-  {word:"picture",phonetic:"/'pɪktʃə/",cn:"画，图画",spell:"pic-tu-re",module:"Unit2"},
-  {word:"today",phonetic:"/tə'deɪ/",cn:"今天",spell:"to-day",module:"Unit2"},
-  {word:"paint",phonetic:"/peɪnt/",cn:"画，作画",spell:"p-ai-nt",module:"Unit2"},
-  {word:"colourful",phonetic:"/'kʌləfl/",cn:"颜色鲜艳的，色彩丰富的",spell:"co-lour-ful",module:"Unit3"},
-  {word:"world",phonetic:"/wɜːld/",cn:"世界",spell:"w-or-ld",module:"Unit3"},
-  {word:"hooray",phonetic:"/hu'reɪ/",cn:"好哇",spell:"hoo-ray",module:"Unit3"},
-  {word:"umbrella",phonetic:"/ʌm'brelə/",cn:"伞；雨伞",spell:"um-bre-lla",module:"Unit3"},
-  {word:"clothes",phonetic:"/kləʊðz/",cn:"衣服",spell:"cl-o-thes",module:"Unit3"},
-  {word:"red",phonetic:"/red/",cn:"红色（的）",spell:"r-e-d",module:"Unit3"},
-  {word:"pink",phonetic:"/pɪŋk/",cn:"粉红色（的）",spell:"p-i-nk",module:"Unit3"},
-  {word:"green",phonetic:"/ɡriːn/",cn:"绿色（的）",spell:"gr-ee-n",module:"Unit3"},
-  {word:"yellow",phonetic:"/'jeləʊ/",cn:"黄色（的）",spell:"y-e-llow",module:"Unit3"},
-  {word:"orange",phonetic:"/'ɒrɪndʒ/",cn:"橙色（的）",spell:"o-ran-ge",module:"Unit3"},
-  {word:"blue",phonetic:"/bluː/",cn:"蓝色（的）",spell:"bl-ue",module:"Unit3"},
-  {word:"purple",phonetic:"/'pɜːpl/",cn:"紫色（的）",spell:"p-ur-ple",module:"Unit3"},
-  {word:"rainbow",phonetic:"/'reɪnbəʊ/",cn:"彩虹",spell:"rain-bow",module:"Unit3"},
-  {word:"want",phonetic:"/wɒnt/",cn:"想要",spell:"w-a-nt",module:"Unit3"},
-  {word:"balloon",phonetic:"/bə'luːn/",cn:"气球",spell:"bal-loon",module:"Unit3"},
-  {word:"big",phonetic:"/bɪɡ/",cn:"大的",spell:"b-i-g",module:"Unit3"},
-  {word:"little",phonetic:"/'lɪtl/",cn:"小的",spell:"li-ttle",module:"Unit3"},
-  {word:"everywhere",phonetic:"/'evriweə/",cn:"在各个地方；处处",spell:"e-very-where",module:"Unit3"},
-  {word:"number",phonetic:"/'nʌmbə/",cn:"数，数字",spell:"num-ber",module:"Unit4"},
-  {word:"count",phonetic:"/kaʊnt/",cn:"数数",spell:"c-ou-nt",module:"Unit4"},
-  {word:"how",phonetic:"/haʊ/",cn:"多少；怎样，如何",spell:"h-ow",module:"Unit4"},
-  {word:"bird",phonetic:"/bɜːd/",cn:"鸟",spell:"b-ir-d",module:"Unit4"},
-  {word:"one",phonetic:"/wʌn/",cn:"一",spell:"o-ne",module:"Unit4"},
-  {word:"two",phonetic:"/tuː/",cn:"二",spell:"t-w-o",module:"Unit4"},
-  {word:"three",phonetic:"/θriː/",cn:"三",spell:"th-r-ee",module:"Unit4"},
-  {word:"four",phonetic:"/fɔː/",cn:"四",spell:"f-our",module:"Unit4"},
-  {word:"five",phonetic:"/faɪv/",cn:"五",spell:"f-i-ve",module:"Unit4"},
-  {word:"six",phonetic:"/sɪks/",cn:"六",spell:"s-i-x",module:"Unit4"},
-  {word:"seven",phonetic:"/'sevn/",cn:"七",spell:"se-ven",module:"Unit4"},
-  {word:"eight",phonetic:"/eɪt/",cn:"八",spell:"eigh-t",module:"Unit4"},
-  {word:"ten",phonetic:"/ten/",cn:"十",spell:"t-e-n",module:"Unit4"},
-  {word:"eleven",phonetic:"/ɪ'levn/",cn:"十一",spell:"e-le-ven",module:"Unit4"},
-  {word:"twelve",phonetic:"/twelv/",cn:"十二",spell:"twe-lve",module:"Unit4"},
-  {word:"rope",phonetic:"/rəʊp/",cn:"绳",spell:"r-o-pe",module:"Unit4"},
-  {word:"who",phonetic:"/huː/",cn:"谁，什么人",spell:"wh-o",module:"Unit4"},
-  {word:"make",phonetic:"/meɪk/",cn:"制作",spell:"m-a-ke",module:"Unit4"},
-  {word:"Chinese knot",phonetic:"/tʃaɪ'niːz nɒt/",cn:"中国结",spell:"Chi-nese knot",module:"Unit4"},
-  {word:"beautiful",phonetic:"/'bjuːtɪfl/",cn:"美丽的",spell:"beau-ti-ful",module:"Unit4"},
-  {word:"only",phonetic:"/'əʊnli/",cn:"仅仅",spell:"o-n-ly",module:"Unit4"},
-  {word:"show",phonetic:"/ʃəʊ/",cn:"给……看",spell:"sh-ow",module:"Unit4"},
-  {word:"baby",phonetic:"/'beɪbi/",cn:"幼崽；雏鸟",spell:"ba-by",module:"Unit4"},
-  {word:"cheep",phonetic:"/tʃiːp/",cn:"吱吱（或唧唧）的叫声",spell:"ch-ee-p",module:"Unit4"},
-  {word:"egg",phonetic:"/eɡ/",cn:"蛋",spell:"e-gg",module:"Unit4"},
-  {word:"hungry",phonetic:"/'hʌŋɡri/",cn:"饥饿的",spell:"hun-gry",module:"Unit4"},
-  {word:"around",phonetic:"/ə'raʊnd/",cn:"环绕，在（……）周围",spell:"a-round",module:"Unit4"},
-  {word:"all",phonetic:"/ɔːl/",cn:"全部，所有",spell:"all",module:"Unit4"},
-  {word:"all around",phonetic:"/ɔːl ə'raʊnd/",cn:"处处，到处",spell:"all a-round",module:"Unit4"},
-  {word:"family",phonetic:"/'fæməli/",cn:"家庭；家人",spell:"fa-mi-ly",module:"Unit5"},
-  {word:"dad",phonetic:"/dæd/",cn:"爸爸",spell:"d-a-d",module:"Unit5"},
-  {word:"mum",phonetic:"/mʌm/",cn:"妈妈",spell:"m-u-m",module:"Unit5"},
-  {word:"brother",phonetic:"/'brʌðə/",cn:"哥哥；弟弟",spell:"bro-ther",module:"Unit5"},
-  {word:"sister",phonetic:"/'sɪstə/",cn:"姐姐；妹妹",spell:"sis-ter",module:"Unit5"},
-  {word:"grandpa",phonetic:"/'ɡrænpɑː/",cn:"祖父；外祖父",spell:"grand-pa",module:"Unit5"},
-  {word:"grandma",phonetic:"/'ɡrænmɑː/",cn:"祖母；外祖母",spell:"grand-ma",module:"Unit5"},
-  {word:"but",phonetic:"/bʌt/",cn:"但是，然而",spell:"b-u-t",module:"Unit5"},
-  {word:"people",phonetic:"/'piːpl/",cn:"人；人们",spell:"peo-ple",module:"Unit5"},
-  {word:"story",phonetic:"/'stɔːri/",cn:"故事",spell:"st-o-ry",module:"Unit5"},
-  {word:"cap",phonetic:"/kæp/",cn:"帽子",spell:"c-a-p",module:"Unit5"},
-  {word:"worry",phonetic:"/'wʌri/",cn:"担心",spell:"wor-ry",module:"Unit5"},
-  {word:"on",phonetic:"/ɒn/",cn:"在……上面",spell:"o-n",module:"Unit5"},
-  {word:"come on",phonetic:"/kʌm ɒn/",cn:"快点；加油",spell:"come on",module:"Unit5"},
-  {word:"photo",phonetic:"/'fəʊtəʊ/",cn:"照片，相片",spell:"pho-to",module:"Unit5"},
-  {word:"love",phonetic:"/lʌv/",cn:"爱，关爱",spell:"l-o-ve",module:"Unit5"},
-  {word:"daddy",phonetic:"/'dædi/",cn:"爸爸",spell:"da-ddy",module:"Unit5"},
-  {word:"mummy",phonetic:"/'mʌmi/",cn:"妈妈",spell:"mu-mmy",module:"Unit5"},
-  {word:"where",phonetic:"/weə/",cn:"在哪里",spell:"wh-ere",module:"Unit5"},
-  {word:"dog",phonetic:"/dɒɡ/",cn:"狗",spell:"d-o-g",module:"Unit5"},
-  {word:"box",phonetic:"/bɒks/",cn:"盒；箱",spell:"b-o-x",module:"Unit5"},
-  {word:"sweet",phonetic:"/swiːt/",cn:"甜蜜的",spell:"sw-ee-t",module:"Unit6"},
-  {word:"home",phonetic:"/həʊm/",cn:"家",spell:"h-o-me",module:"Unit6"},
-  {word:"game",phonetic:"/ɡeɪm/",cn:"游戏",spell:"g-a-me",module:"Unit6"},
-  {word:"room",phonetic:"/ruːm/",cn:"房间",spell:"r-oo-m",module:"Unit6"},
-  {word:"living room",phonetic:"/'lɪvɪŋ ruːm/",cn:"客厅",spell:"li-ving room",module:"Unit6"},
-  {word:"bedroom",phonetic:"/'bedruːm/",cn:"卧室",spell:"bed-room",module:"Unit6"},
-  {word:"bathroom",phonetic:"/'bɑːθruːm/",cn:"浴室，卫生间",spell:"bath-room",module:"Unit6"},
-  {word:"kitchen",phonetic:"/'kɪtʃɪn/",cn:"厨房",spell:"ki-tchen",module:"Unit6"},
-  {word:"dining room",phonetic:"/'daɪnɪŋ ruːm/",cn:"餐厅",spell:"di-ning room",module:"Unit6"},
-  {word:"door",phonetic:"/dɔː/",cn:"门",spell:"d-oor",module:"Unit6"},
-  {word:"chair",phonetic:"/tʃeə/",cn:"椅子",spell:"ch-air",module:"Unit6"},
-  {word:"think",phonetic:"/θɪŋk/",cn:"想，认为",spell:"th-i-nk",module:"Unit6"},
-  {word:"under",phonetic:"/'ʌndə/",cn:"在……下面；在……底下",spell:"un-der",module:"Unit6"},
-  {word:"bed",phonetic:"/bed/",cn:"床",spell:"b-e-d",module:"Unit6"},
-  {word:"toy",phonetic:"/tɔɪ/",cn:"玩具",spell:"t-oy",module:"Unit6"},
-  {word:"miaow",phonetic:"/mi'aʊ/",cn:"咪，喵（猫叫声）",spell:"mi-aow",module:"Unit6"},
-  {word:"table",phonetic:"/'teɪbl/",cn:"桌子",spell:"ta-ble",module:"Unit6"},
-  {word:"cat",phonetic:"/kæt/",cn:"猫",spell:"c-a-t",module:"Unit6"},
-  {word:"ball",phonetic:"/bɔːl/",cn:"球",spell:"b-all",module:"Unit6"},
-  {word:"their",phonetic:"/ðeə/",cn:"他们的",spell:"th-eir",module:"Unit6"},
-  {word:"apple",phonetic:"/'æpl/",cn:"苹果",spell:"a-pple",module:"Unit6"},
-  {word:"share",phonetic:"/ʃeə/",cn:"共用；分享",spell:"sh-are",module:"Unit6"},
-  {word:"put",phonetic:"/pʊt/",cn:"放",spell:"p-u-t",module:"Unit6"},
-  {word:"cooking",phonetic:"/'kʊkɪŋ/",cn:"做饭",spell:"co-o-king",module:"Unit6"},
-  {word:"sun",phonetic:"/sʌn/",cn:"太阳",spell:"s-u-n",module:"Unit6"},
-  {word:"like",phonetic:"/laɪk/",cn:"喜欢",spell:"l-i-ke",module:"Unit6"},
-  {word:"run",phonetic:"/rʌn/",cn:"跑",spell:"r-u-n",module:"Unit6"},
-  {word:"lucky",phonetic:"/'lʌki/",cn:"幸运的",spell:"lu-cky",module:"Unit6"}
+  {word:"welcome",phonetic:"/welkəm/",cn:"欢迎",spell:"wel-come",module:"Welcome",ipaParts:[{"part": "wel", "ipa": "/wel/"}, {"part": "come", "ipa": "/kəm/"}]},
+  {word:"to",phonetic:"/tuː/",cn:"用于动词、名词或形容词后，使意思完整；向，到，往",spell:"t-o",module:"Welcome",ipaParts:[{"part": "t", "ipa": "/t/"}, {"part": "o", "ipa": "/uː/"}]},
+  {word:"school",phonetic:"/skuːl/",cn:"学校",spell:"s-ch-ool",module:"Welcome",ipaParts:[{"part": "s", "ipa": "/s/"}, {"part": "ch", "ipa": "/sk/"}, {"part": "ool", "ipa": "/uː/"}]},
+  {word:"hi",phonetic:"/haɪ/",cn:"嘿，喂，你好",spell:"hi",module:"Welcome",ipaParts:[{"part": "hi", "ipa": "/haɪ/"}]},
+  {word:"I",phonetic:"/aɪ/",cn:"我",spell:"I",module:"Welcome",ipaParts:[{"part": "I", "ipa": "/aɪ/"}]},
+  {word:"be",phonetic:"/biː/",cn:"是",spell:"b-e",module:"Welcome",ipaParts:[{"part": "b", "ipa": "/b/"}, {"part": "e", "ipa": "/iː/"}]},
+  {word:"what",phonetic:"/wɒt/",cn:"什么",spell:"wh-at",module:"Welcome",ipaParts:[{"part": "wh", "ipa": "/w/"}, {"part": "at", "ipa": "/ɒt/"}]},
+  {word:"your",phonetic:"/jɔː/",cn:"你的；你们的",spell:"y-our",module:"Welcome",ipaParts:[{"part": "y", "ipa": "/j/"}, {"part": "our", "ipa": "/ɔː/"}]},
+  {word:"name",phonetic:"/neɪm/",cn:"名字",spell:"n-a-me",module:"Welcome",ipaParts:[{"part": "n", "ipa": "/n/"}, {"part": "a", "ipa": "/eɪ/"}, {"part": "me", "ipa": "/m/"}]},
+  {word:"hello",phonetic:"/hə'ləʊ/",cn:"喂，哈啰，你好",spell:"he-llo",module:"Welcome",ipaParts:[{"part": "he", "ipa": "/hə/"}, {"part": "llo", "ipa": "/ləʊ/"}]},
+  {word:"my",phonetic:"/maɪ/",cn:"我的",spell:"m-y",module:"Welcome",ipaParts:[{"part": "m", "ipa": "/maɪ/"}, {"part": "y", "ipa": "/-/"}]},
+  {word:"goodbye",phonetic:"/ɡʊd'baɪ/",cn:"再见",spell:"good-bye",module:"Welcome",ipaParts:[{"part": "good", "ipa": "/ɡʊd/"}, {"part": "bye", "ipa": "/baɪ/"}]},
+  {word:"have",phonetic:"/hæv/",cn:"有，拥有",spell:"h-a-ve",module:"Welcome",ipaParts:[{"part": "h", "ipa": "/h/"}, {"part": "a", "ipa": "/æ/"}, {"part": "ve", "ipa": "/v/"}]},
+  {word:"a",phonetic:"/ə/",cn:"一（个）",spell:"a",module:"Welcome",ipaParts:[{"part": "a", "ipa": "/ə/"}]},
+  {word:"nice",phonetic:"/naɪs/",cn:"令人愉快的",spell:"n-i-ce",module:"Welcome",ipaParts:[{"part": "n", "ipa": "/n/"}, {"part": "i", "ipa": "/aɪ/"}, {"part": "ce", "ipa": "/s/"}]},
+  {word:"day",phonetic:"/deɪ/",cn:"一天",spell:"d-ay",module:"Welcome",ipaParts:[{"part": "d", "ipa": "/d/"}, {"part": "ay", "ipa": "/eɪ/"}]},
+  {word:"good",phonetic:"/ɡʊd/",cn:"好的",spell:"g-oo-d",module:"Welcome",ipaParts:[{"part": "g", "ipa": "/ɡ/"}, {"part": "oo", "ipa": "/ʊ/"}, {"part": "d", "ipa": "/d/"}]},
+  {word:"morning",phonetic:"/'mɔːnɪŋ/",cn:"早晨，上午",spell:"mor-ning",module:"Welcome",ipaParts:[{"part": "mor", "ipa": "/ˈmɔː/"}, {"part": "ning", "ipa": "/nɪŋ/"}]},
+  {word:"Ms",phonetic:"/mɪz/",cn:"女士",spell:"M-s",module:"Welcome",ipaParts:[{"part": "M", "ipa": "/m/"}, {"part": "s", "ipa": "/z/"}]},
+  {word:"stand",phonetic:"/stænd/",cn:"站立",spell:"st-a-nd",module:"Welcome",ipaParts:[{"part": "st", "ipa": "/st/"}, {"part": "a", "ipa": "/æ/"}, {"part": "nd", "ipa": "/nd/"}]},
+  {word:"sit",phonetic:"/sɪt/",cn:"坐",spell:"s-i-t",module:"Welcome",ipaParts:[{"part": "s", "ipa": "/s/"}, {"part": "i", "ipa": "/ɪ/"}, {"part": "t", "ipa": "/t/"}]},
+  {word:"open",phonetic:"/'əʊpən/",cn:"打开",spell:"o-pen",module:"Welcome",ipaParts:[{"part": "o", "ipa": "/ˈəʊ/"}, {"part": "pen", "ipa": "/pən/"}]},
+  {word:"book",phonetic:"/bʊk/",cn:"书",spell:"b-oo-k",module:"Welcome",ipaParts:[{"part": "b", "ipa": "/b/"}, {"part": "oo", "ipa": "/ʊ/"}, {"part": "k", "ipa": "/k/"}]},
+  {word:"close",phonetic:"/kləʊz/",cn:"合上",spell:"cl-o-se",module:"Welcome",ipaParts:[{"part": "cl", "ipa": "/kl/"}, {"part": "o", "ipa": "/əʊ/"}, {"part": "se", "ipa": "/z/"}]},
+  {word:"point",phonetic:"/pɔɪnt/",cn:"指",spell:"p-oi-nt",module:"Welcome",ipaParts:[{"part": "p", "ipa": "/p/"}, {"part": "oi", "ipa": "/ɔɪ/"}, {"part": "nt", "ipa": "/nt/"}]},
+  {word:"say",phonetic:"/seɪ/",cn:"说",spell:"s-ay",module:"Welcome",ipaParts:[{"part": "s", "ipa": "/s/"}, {"part": "ay", "ipa": "/eɪ/"}]},
+  {word:"read",phonetic:"/riːd/",cn:"阅读",spell:"r-ea-d",module:"Welcome",ipaParts:[{"part": "r", "ipa": "/r/"}, {"part": "ea", "ipa": "/iː/"}, {"part": "d", "ipa": "/d/"}]},
+  {word:"listen",phonetic:"/'lɪsn/",cn:"听",spell:"li-sten",module:"Welcome",ipaParts:[{"part": "li", "ipa": "/ˈlɪ/"}, {"part": "sten", "ipa": "/sn/"}]},
+  {word:"write",phonetic:"/raɪt/",cn:"写",spell:"wr-i-te",module:"Welcome",ipaParts:[{"part": "wr", "ipa": "/r/"}, {"part": "i", "ipa": "/aɪ/"}, {"part": "te", "ipa": "/t/"}]},
+  {word:"play",phonetic:"/pleɪ/",cn:"玩，玩耍",spell:"pl-ay",module:"Welcome",ipaParts:[{"part": "pl", "ipa": "/pl/"}, {"part": "ay", "ipa": "/eɪ/"}]},
+  {word:"happy",phonetic:"/'hæpi/",cn:"高兴的，快乐的",spell:"ha-ppy",module:"Welcome",ipaParts:[{"part": "ha", "ipa": "/hæ/"}, {"part": "ppy", "ipa": "/pi/"}]},
+  {word:"new",phonetic:"/njuː/",cn:"新的",spell:"n-ew",module:"Welcome",ipaParts:[{"part": "n", "ipa": "/n/"}, {"part": "ew", "ipa": "/juː/"}]},
+  {word:"do",phonetic:"/duː/",cn:"构成疑问句或否定句；做",spell:"d-o",module:"Welcome",ipaParts:[{"part": "d", "ipa": "/d/"}, {"part": "o", "ipa": "/uː/"}]},
+  {word:"they",phonetic:"/ðeɪ/",cn:"他们",spell:"th-ey",module:"Welcome",ipaParts:[{"part": "th", "ipa": "/ð/"}, {"part": "ey", "ipa": "/eɪ/"}]},
+  {word:"everyone",phonetic:"/'evriwʌn/",cn:"每个人，人人",spell:"e-very-one",module:"Welcome",ipaParts:[{"part": "e", "ipa": "/ˈe/"}, {"part": "very", "ipa": "/vri/"}, {"part": "one", "ipa": "/wʌn/"}]},
+  {word:"nine",phonetic:"/naɪn/",cn:"九",spell:"n-i-ne",module:"Welcome",ipaParts:[{"part": "n", "ipa": "/n/"}, {"part": "i", "ipa": "/aɪ/"}, {"part": "ne", "ipa": "/n/"}]},
+  {word:"she",phonetic:"/ʃiː/",cn:"她",spell:"sh-e",module:"Welcome",ipaParts:[{"part": "sh", "ipa": "/ʃ/"}, {"part": "e", "ipa": "/iː/"}]},
+  {word:"too",phonetic:"/tuː/",cn:"也",spell:"t-oo",module:"Welcome",ipaParts:[{"part": "t", "ipa": "/t/"}, {"part": "oo", "ipa": "/uː/"}]},
+  {word:"we",phonetic:"/wiː/",cn:"我们",spell:"w-e",module:"Welcome",ipaParts:[{"part": "w", "ipa": "/w/"}, {"part": "e", "ipa": "/iː/"}]},
+  {word:"from",phonetic:"/frɒm/",cn:"从",spell:"fr-om",module:"Welcome",ipaParts:[{"part": "fr", "ipa": "/fr/"}, {"part": "om", "ipa": "/ɒm/"}]},
+  {word:"the",phonetic:"/ðə/",cn:"用于表示正在谈论一个已经提到过、已经知道，或是唯一存在的人或物",spell:"th-e",module:"Welcome",ipaParts:[{"part": "th", "ipa": "/ð/"}, {"part": "e", "ipa": "/ə/"}]},
+  {word:"twin",phonetic:"/twɪn/",cn:"双胞胎中的一个",spell:"tw-i-n",module:"Welcome",ipaParts:[{"part": "tw", "ipa": "/tw/"}, {"part": "i", "ipa": "/ɪ/"}, {"part": "n", "ipa": "/n/"}]},
+  {word:"he",phonetic:"/hiː/",cn:"他",spell:"h-e",module:"Welcome",ipaParts:[{"part": "h", "ipa": "/h/"}, {"part": "e", "ipa": "/iː/"}]},
+  {word:"come",phonetic:"/kʌm/",cn:"来；来到",spell:"c-o-me",module:"Welcome",ipaParts:[{"part": "c", "ipa": "/k/"}, {"part": "o", "ipa": "/ʌ/"}, {"part": "me", "ipa": "/m/"}]},
+  {word:"and",phonetic:"/ænd/",cn:"然后，接着；和",spell:"a-nd",module:"Welcome",ipaParts:[{"part": "a", "ipa": "/ænd/"}, {"part": "nd", "ipa": "/-/"}]},
+  {word:"oh",phonetic:"/əʊ/",cn:"噢",spell:"oh",module:"Welcome",ipaParts:[{"part": "oh", "ipa": "/əʊ/"}]},
+  {word:"no",phonetic:"/nəʊ/",cn:"不，不行",spell:"n-o",module:"Welcome",ipaParts:[{"part": "n", "ipa": "/n/"}, {"part": "o", "ipa": "/əʊ/"}]},
+  {word:"help",phonetic:"/help/",cn:"帮助，帮忙",spell:"h-e-lp",module:"Welcome",ipaParts:[{"part": "h", "ipa": "/h/"}, {"part": "e", "ipa": "/e/"}, {"part": "lp", "ipa": "/lp/"}]},
+  {word:"here",phonetic:"/hɪə/",cn:"在这里",spell:"h-ere",module:"Welcome",ipaParts:[{"part": "h", "ipa": "/h/"}, {"part": "ere", "ipa": "/ɪə/"}]},
+  {word:"thank",phonetic:"/θæŋk/",cn:"感谢，向……表示谢意",spell:"th-ank",module:"Welcome",ipaParts:[{"part": "th", "ipa": "/θ/"}, {"part": "a", "ipa": "/æ/"}, {"part": "nk", "ipa": "/ŋk/"}]},
+  {word:"together",phonetic:"/tə'ɡeðə/",cn:"一起，一块儿",spell:"to-ge-ther",module:"Welcome",ipaParts:[{"part": "to", "ipa": "/tə/"}, {"part": "ge", "ipa": "/ˈɡe/"}, {"part": "ther", "ipa": "/ðə/"}]},
+  {word:"OK",phonetic:"/əʊ'keɪ/",cn:"行，可以",spell:"O-K",module:"Welcome",ipaParts:[{"part": "O", "ipa": "/əʊ/"}, {"part": "K", "ipa": "/keɪ/"}]},
+  {word:"great",phonetic:"/ɡreɪt/",cn:"极棒的，极好的",spell:"gr-ea-t",module:"Welcome",ipaParts:[{"part": "gr", "ipa": "/ɡre/"}, {"part": "ea", "ipa": "/ɪ/"}, {"part": "t", "ipa": "/t/"}]},
+  {word:"song",phonetic:"/sɒŋ/",cn:"歌曲",spell:"s-o-ng",module:"Welcome",ipaParts:[{"part": "s", "ipa": "/s/"}, {"part": "o", "ipa": "/ɒ/"}, {"part": "ng", "ipa": "/ŋ/"}]},
+  {word:"dear",phonetic:"/dɪə/",cn:"亲爱的",spell:"d-ear",module:"Welcome",ipaParts:[{"part": "d", "ipa": "/d/"}, {"part": "ear", "ipa": "/ɪə/"}]},
+  {word:"sing",phonetic:"/sɪŋ/",cn:"唱，歌唱",spell:"s-i-ng",module:"Welcome",ipaParts:[{"part": "s", "ipa": "/s/"}, {"part": "i", "ipa": "/ɪ/"}, {"part": "ng", "ipa": "/ŋ/"}]},
+  {word:"now",phonetic:"/naʊ/",cn:"现在",spell:"n-ow",module:"Welcome",ipaParts:[{"part": "n", "ipa": "/n/"}, {"part": "ow", "ipa": "/aʊ/"}]},
+  {word:"know",phonetic:"/nəʊ/",cn:"认识；知道，了解",spell:"kn-ow",module:"Welcome",ipaParts:[{"part": "kn", "ipa": "/n/"}, {"part": "ow", "ipa": "/əʊ/"}]},
+  {word:"our",phonetic:"/'aʊə/",cn:"我们的",spell:"ou-r",module:"Welcome",ipaParts:[{"part": "ou", "ipa": "/aʊ/"}, {"part": "r", "ipa": "/ə/"}]},
+  {word:"everybody",phonetic:"/'evribɒdi/",cn:"每个人，人人",spell:"e-very-bo-dy",module:"Welcome",ipaParts:[{"part": "e", "ipa": "/ˈe/"}, {"part": "very", "ipa": "/vri/"}, {"part": "bo", "ipa": "/bə/"}, {"part": "dy", "ipa": "/di/"}]},
+  {word:"with",phonetic:"/wɪð/",cn:"和……一起",spell:"w-i-th",module:"Welcome",ipaParts:[{"part": "w", "ipa": "/w/"}, {"part": "i", "ipa": "/ɪ/"}, {"part": "th", "ipa": "/ð/"}]},
+  {word:"me",phonetic:"/miː/",cn:"我",spell:"m-e",module:"Welcome",ipaParts:[{"part": "m", "ipa": "/m/"}, {"part": "e", "ipa": "/iː/"}]},
+  {word:"let's",phonetic:"/lets/",cn:"让我们",spell:"let's",module:"Unit1",ipaParts:[{"part": "let's", "ipa": "/lets/"}]},
+  {word:"friend",phonetic:"/frend/",cn:"朋友",spell:"f-ri-end",module:"Unit1",ipaParts:[{"part": "f", "ipa": "/f/"}, {"part": "ri", "ipa": "/r/"}, {"part": "end", "ipa": "/end/"}]},
+  {word:"meet",phonetic:"/miːt/",cn:"认识，结识",spell:"m-ee-t",module:"Unit1",ipaParts:[{"part": "m", "ipa": "/m/"}, {"part": "ee", "ipa": "/iː/"}, {"part": "t", "ipa": "/t/"}]},
+  {word:"you",phonetic:"/juː/",cn:"你；你们",spell:"y-ou",module:"Unit1",ipaParts:[{"part": "y", "ipa": "/j/"}, {"part": "ou", "ipa": "/uː/"}]},
+  {word:"pen",phonetic:"/pen/",cn:"钢笔",spell:"p-e-n",module:"Unit1",ipaParts:[{"part": "p", "ipa": "/p/"}, {"part": "e", "ipa": "/e/"}, {"part": "n", "ipa": "/n/"}]},
+  {word:"pencil",phonetic:"/'pensl/",cn:"铅笔",spell:"pen-cil",module:"Unit1",ipaParts:[{"part": "pen", "ipa": "/pen/"}, {"part": "cil", "ipa": "/sl/"}]},
+  {word:"pencil case",phonetic:"/'pensl keɪs/",cn:"笔袋；铅笔盒",spell:"pen-cil case",module:"Unit1",ipaParts:[{"part": "pen-cil", "ipa": "/pensl/"}, {"part": "case", "ipa": "/keɪs/"}]},
+  {word:"bag",phonetic:"/bæɡ/",cn:"袋；包",spell:"b-a-g",module:"Unit1",ipaParts:[{"part": "b", "ipa": "/b/"}, {"part": "a", "ipa": "/æ/"}, {"part": "g", "ipa": "/g/"}]},
+  {word:"for",phonetic:"/fɔː/",cn:"为了",spell:"f-or",module:"Unit1",ipaParts:[{"part": "f", "ipa": "/f/"}, {"part": "or", "ipa": "/ɔː/"}]},
+  {word:"ruler",phonetic:"/'ruːlə/",cn:"尺子，直尺",spell:"r-u-ler",module:"Unit1",ipaParts:[{"part": "r", "ipa": "/r/"}, {"part": "u", "ipa": "/uː/"}, {"part": "ler", "ipa": "/lə/"}]},
+  {word:"eraser",phonetic:"/ɪ'reɪzə/",cn:"橡皮",spell:"e-ra-ser",module:"Unit1",ipaParts:[{"part": "e", "ipa": "/ɪ/"}, {"part": "ra", "ipa": "/reɪ/"}, {"part": "ser", "ipa": "/zə/"}]},
+  {word:"this",phonetic:"/ðɪs/",cn:"这，这个",spell:"th-i-s",module:"Unit1",ipaParts:[{"part": "th", "ipa": "/ð/"}, {"part": "i", "ipa": "/ɪ/"}, {"part": "s", "ipa": "/s/"}]},
+  {word:"in",phonetic:"/ɪn/",cn:"在……里",spell:"i-n",module:"Unit1",ipaParts:[{"part": "i", "ipa": "/ɪ/"}, {"part": "n", "ipa": "/n/"}]},
+  {word:"schoolbag",phonetic:"/'skuːlbæɡ/",cn:"书包",spell:"school-bag",module:"Unit1",ipaParts:[{"part": "school", "ipa": "/skuːl/"}, {"part": "bag", "ipa": "/bæɡ/"}]},
+  {word:"it",phonetic:"/ɪt/",cn:"它",spell:"i-t",module:"Unit1",ipaParts:[{"part": "i", "ipa": "/ɪ/"}, {"part": "t", "ipa": "/t/"}]},
+  {word:"not",phonetic:"/nɒt/",cn:"不，不是",spell:"n-o-t",module:"Unit1",ipaParts:[{"part": "n", "ipa": "/n/"}, {"part": "o", "ipa": "/ɒ/"}, {"part": "t", "ipa": "/t/"}]},
+  {word:"that",phonetic:"/ðæt/",cn:"那，那个",spell:"th-a-t",module:"Unit1",ipaParts:[{"part": "th", "ipa": "/ð/"}, {"part": "a", "ipa": "/æ/"}, {"part": "t", "ipa": "/t/"}]},
+  {word:"yes",phonetic:"/jes/",cn:"是，对",spell:"y-e-s",module:"Unit1",ipaParts:[{"part": "y", "ipa": "/j/"}, {"part": "e", "ipa": "/e/"}, {"part": "s", "ipa": "/s/"}]},
+  {word:"guess",phonetic:"/ɡes/",cn:"猜，猜测",spell:"g-u-ess",module:"Unit1",ipaParts:[{"part": "g", "ipa": "/ɡ/"}, {"part": "u", "ipa": "/ʌ/"}, {"part": "ess", "ipa": "/es/"}]},
+  {word:"find",phonetic:"/faɪnd/",cn:"发现，找到",spell:"f-i-nd",module:"Unit1",ipaParts:[{"part": "f", "ipa": "/faɪ/"}, {"part": "nd", "ipa": "/nd/"}]},
+  {word:"lost and found",phonetic:"/lɒst ənd faʊnd/",cn:"失物招领",spell:"lost and found",module:"Unit1",ipaParts:[{"part": "lost", "ipa": "/lɒst/"}, {"part": "and", "ipa": " / "}, {"part": "found", "ipa": "/faʊnd/"}]},
+  {word:"bye",phonetic:"/baɪ/",cn:"再见，拜拜",spell:"b-ye",module:"Unit1",ipaParts:[{"part": "b", "ipa": "/b/"}, {"part": "ye", "ipa": "/aɪ/"}]},
+  {word:"kid",phonetic:"/kɪd/",cn:"小孩，儿童",spell:"k-i-d",module:"Unit1",ipaParts:[{"part": "k", "ipa": "/k/"}, {"part": "i", "ipa": "/ɪ/"}, {"part": "d", "ipa": "/d/"}]},
+  {word:"take care of",phonetic:"/teɪk keə ɒv/",cn:"照看（照料）某人/某物",spell:"take care of",module:"Unit1",ipaParts:[{"part": "take", "ipa": "/teɪk/"}, {"part": "care", "ipa": "/keə/"}, {"part": "of", "ipa": " /ɒv/"}]},
+  {word:"there",phonetic:"/ðeə/",cn:"在那里",spell:"th-ere",module:"Unit1",ipaParts:[{"part": "th", "ipa": "/ð/"}, {"part": "ere", "ipa": "/eə/"}]},
+  {word:"please",phonetic:"/pliːz/",cn:"请",spell:"pl-ea-se",module:"Unit1",ipaParts:[{"part": "pl", "ipa": "/pl/"}, {"part": "ea", "ipa": "/iː/"}, {"part": "se", "ipa": "/z/"}]},
+  {word:"back",phonetic:"/bæk/",cn:"回到原处",spell:"b-a-ck",module:"Unit1",ipaParts:[{"part": "b", "ipa": "/b/"}, {"part": "a", "ipa": "/æ/"}, {"part": "ck", "ipa": "/k/"}]},
+  {word:"come back",phonetic:"/kʌm bæk/",cn:"回来",spell:"come back",module:"Unit1",ipaParts:[{"part": "come", "ipa": "/kʌm/"}, {"part": "back", "ipa": "/bæk/"}]},
+  {word:"look",phonetic:"/lʊk/",cn:"看，瞧，望",spell:"l-oo-k",module:"Unit1",ipaParts:[{"part": "l", "ipa": "/l/"}, {"part": "oo", "ipa": "/ʊ/"}, {"part": "k", "ipa": "/k/"}]},
+  {word:"thing",phonetic:"/θɪŋ/",cn:"东西",spell:"th-i-ng",module:"Unit2",ipaParts:[{"part": "th", "ipa": "/θ/"}, {"part": "i", "ipa": "/ɪ/"}, {"part": "ng", "ipa": "/ŋ/"}]},
+  {word:"pack",phonetic:"/pæk/",cn:"收拾好",spell:"p-a-ck",module:"Unit2",ipaParts:[{"part": "p", "ipa": "/p/"}, {"part": "a", "ipa": "/æ/"}, {"part": "ck", "ipa": "/k/"}]},
+  {word:"colour",phonetic:"/'kʌlə/",cn:"颜色",spell:"c-o-lour",module:"Unit2",ipaParts:[{"part": "c", "ipa": "/ˈk/"}, {"part": "o", "ipa": "/ʌ/"}, {"part": "lour", "ipa": "/lə/"}]},
+  {word:"can",phonetic:"/kæn/",cn:"能，会",spell:"c-a-n",module:"Unit2",ipaParts:[{"part": "c", "ipa": "/k/"}, {"part": "a", "ipa": "/æ/"}, {"part": "n", "ipa": "/n/"}]},
+  {word:"see",phonetic:"/siː/",cn:"看见，看到",spell:"s-ee",module:"Unit2",ipaParts:[{"part": "s", "ipa": "/s/"}, {"part": "ee", "ipa": "/iː/"}]},
+  {word:"right",phonetic:"/raɪt/",cn:"正确的，对的",spell:"r-i-ght",module:"Unit2",ipaParts:[{"part": "r", "ipa": "/r/"}, {"part": "igh", "ipa": "/aɪ/"}, {"part": "t", "ipa": "/t/"}]},
+  {word:"first",phonetic:"/fɜːst/",cn:"第一的",spell:"f-ir-st",module:"Unit2",ipaParts:[{"part": "f", "ipa": "/f/"}, {"part": "ir", "ipa": "/ɜː/"}, {"part": "st", "ipa": "/st/"}]},
+  {word:"magical",phonetic:"/'mædʒɪkl/",cn:"神奇的；有魔力的",spell:"ma-gi-cal",module:"Unit2",ipaParts:[{"part": "ma", "ipa": "/mæ/"}, {"part": "gi", "ipa": "/dʒ/"}, {"part": "cal", "ipa": "/kl/"}]},
+  {word:"fun",phonetic:"/fʌn/",cn:"有趣的，逗乐的",spell:"f-u-n",module:"Unit2",ipaParts:[{"part": "f", "ipa": "/f/"}, {"part": "u", "ipa": "/ʌ/"}, {"part": "n", "ipa": "/n/"}]},
+  {word:"black",phonetic:"/blæk/",cn:"黑色（的）",spell:"bl-a-ck",module:"Unit2",ipaParts:[{"part": "bl", "ipa": "/bl/"}, {"part": "a", "ipa": "/æ/"}, {"part": "ck", "ipa": "/k/"}]},
+  {word:"so",phonetic:"/səʊ/",cn:"这么，如此",spell:"s-o",module:"Unit2",ipaParts:[{"part": "s", "ipa": "/s/"}, {"part": "o", "ipa": "/əʊ/"}]},
+  {word:"many",phonetic:"/'meni/",cn:"许多；大量",spell:"m-a-ny",module:"Unit2",ipaParts:[{"part": "m", "ipa": "/m/"}, {"part": "a", "ipa": "/e/"}, {"part": "ny", "ipa": "/ni/"}]},
+  {word:"picture",phonetic:"/'pɪktʃə/",cn:"画，图画",spell:"pic-tu-re",module:"Unit2",ipaParts:[{"part": "pic", "ipa": "/ˈpɪk/"}, {"part": "tu", "ipa": "/tʃ/"}, {"part": "re", "ipa": "/ə/"}]},
+  {word:"today",phonetic:"/tə'deɪ/",cn:"今天",spell:"to-day",module:"Unit2",ipaParts:[{"part": "to", "ipa": "/tə/"}, {"part": "day", "ipa": "/deɪ/"}]},
+  {word:"paint",phonetic:"/peɪnt/",cn:"画，作画",spell:"p-ai-nt",module:"Unit2",ipaParts:[{"part": "p", "ipa": "/p/"}, {"part": "ai", "ipa": "/eɪ/"}, {"part": "nt", "ipa": "/nt/"}]},
+  {word:"colourful",phonetic:"/'kʌləfl/",cn:"颜色鲜艳的，色彩丰富的",spell:"co-lour-ful",module:"Unit3",ipaParts:[{"part": "co", "ipa": "/ˈk/"}, {"part": "lour", "ipa": "/lə/"}, {"part": "ful", "ipa": "/fl/"}]},
+  {word:"world",phonetic:"/wɜːld/",cn:"世界",spell:"w-or-ld",module:"Unit3",ipaParts:[{"part": "w", "ipa": "/w/"}, {"part": "or", "ipa": "/ɜː/"}, {"part": "ld", "ipa": "/ld/"}]},
+  {word:"hooray",phonetic:"/hu'reɪ/",cn:"好哇",spell:"hoo-ray",module:"Unit3",ipaParts:[{"part": "hoo", "ipa": "/huː/"}, {"part": "ray", "ipa": "/reɪ/"}]},
+  {word:"umbrella",phonetic:"/ʌm'brelə/",cn:"伞；雨伞",spell:"um-bre-lla",module:"Unit3",ipaParts:[{"part": "um", "ipa": "/ʌm/"}, {"part": "bre", "ipa": "/bre/"}, {"part": "lla", "ipa": "/lə/"}]},
+  {word:"clothes",phonetic:"/kləʊðz/",cn:"衣服",spell:"cl-o-thes",module:"Unit3",ipaParts:[{"part": "cl", "ipa": "/kl/"}, {"part": "o", "ipa": "/əʊ/"}, {"part": "thes", "ipa": "/ðz/"}]},
+  {word:"red",phonetic:"/red/",cn:"红色（的）",spell:"r-e-d",module:"Unit3",ipaParts:[{"part": "r", "ipa": "/r/"}, {"part": "e", "ipa": "/e/"}, {"part": "d", "ipa": "/d/"}]},
+  {word:"pink",phonetic:"/pɪŋk/",cn:"粉红色（的）",spell:"p-i-nk",module:"Unit3",ipaParts:[{"part": "p", "ipa": "/p/"}, {"part": "i", "ipa": "/ɪ/"}, {"part": "nk", "ipa": "/ŋk/"}]},
+  {word:"green",phonetic:"/ɡriːn/",cn:"绿色（的）",spell:"gr-ee-n",module:"Unit3",ipaParts:[{"part": "gr", "ipa": "/ɡr/"}, {"part": "ee", "ipa": "/iː/"}, {"part": "n", "ipa": "/n/"}]},
+  {word:"yellow",phonetic:"/'jeləʊ/",cn:"黄色（的）",spell:"y-e-llow",module:"Unit3",ipaParts:[{"part": "y", "ipa": "/j/"}, {"part": "e", "ipa": "/e/"}, {"part": "llow", "ipa": "/ləʊ/"}]},
+  {word:"orange",phonetic:"/'ɒrɪndʒ/",cn:"橙色（的）",spell:"o-ran-ge",module:"Unit3",ipaParts:[{"part": "o", "ipa": "/ˈɒ/"}, {"part": "ran", "ipa": "/rɪn/"}, {"part": "ge", "ipa": "/dʒ/"}]},
+  {word:"blue",phonetic:"/bluː/",cn:"蓝色（的）",spell:"bl-ue",module:"Unit3",ipaParts:[{"part": "bl", "ipa": "/bl/"}, {"part": "ue", "ipa": "/uː/"}]},
+  {word:"purple",phonetic:"/'pɜːpl/",cn:"紫色（的）",spell:"p-ur-ple",module:"Unit3",ipaParts:[{"part": "p", "ipa": "/p/"}, {"part": "ur", "ipa": "/ɜː/"}, {"part": "ple", "ipa": "/pl/"}]},
+  {word:"rainbow",phonetic:"/'reɪnbəʊ/",cn:"彩虹",spell:"rain-bow",module:"Unit3",ipaParts:[{"part": "rain", "ipa": "/reɪn/"}, {"part": "bow", "ipa": "/bəʊ/"}]},
+  {word:"want",phonetic:"/wɒnt/",cn:"想要",spell:"w-a-nt",module:"Unit3",ipaParts:[{"part": "w", "ipa": "/w/"}, {"part": "a", "ipa": "/ɒ/"}, {"part": "nt", "ipa": "/nt/"}]},
+  {word:"balloon",phonetic:"/bə'luːn/",cn:"气球",spell:"bal-loon",module:"Unit3",ipaParts:[{"part": "bal", "ipa": "/bə/"}, {"part": "loon", "ipa": "/luːn/"}]},
+  {word:"big",phonetic:"/bɪɡ/",cn:"大的",spell:"b-i-g",module:"Unit3",ipaParts:[{"part": "b", "ipa": "/b/"}, {"part": "i", "ipa": "/ɪ/"}, {"part": "g", "ipa": "/g/"}]},
+  {word:"little",phonetic:"/'lɪtl/",cn:"小的",spell:"li-ttle",module:"Unit3",ipaParts:[{"part": "li", "ipa": "/ˈlɪ/"}, {"part": "ttle", "ipa": "/tl/"}]},
+  {word:"everywhere",phonetic:"/'evriweə/",cn:"在各个地方；处处",spell:"e-very-where",module:"Unit3",ipaParts:[{"part": "e", "ipa": "/ˈe/"}, {"part": "very", "ipa": "/vri/"}, {"part": "where", "ipa": "/weə/"}]},
+  {word:"number",phonetic:"/'nʌmbə/",cn:"数，数字",spell:"num-ber",module:"Unit4",ipaParts:[{"part": "num", "ipa": "/ˈnʌm/"}, {"part": "ber", "ipa": "/bə/"}]},
+  {word:"count",phonetic:"/kaʊnt/",cn:"数数",spell:"c-ou-nt",module:"Unit4",ipaParts:[{"part": "c", "ipa": "/kaʊ/"}, {"part": "ount", "ipa": "/nt/"}]},
+  {word:"how",phonetic:"/haʊ/",cn:"多少；怎样，如何",spell:"h-ow",module:"Unit4",ipaParts:[{"part": "h", "ipa": "/h/"}, {"part": "ow", "ipa": "/aʊ/"}]},
+  {word:"bird",phonetic:"/bɜːd/",cn:"鸟",spell:"b-ir-d",module:"Unit4",ipaParts:[{"part": "b", "ipa": "/b/"}, {"part": "ir", "ipa": "/ɜː/"}, {"part": "d", "ipa": "/d/"}]},
+  {word:"one",phonetic:"/wʌn/",cn:"一",spell:"o-ne",module:"Unit4",ipaParts:[{"part": "o", "ipa": "/wʌ/"}, {"part": "ne", "ipa": "/n/"}]},
+  {word:"two",phonetic:"/tuː/",cn:"二",spell:"t-w-o",module:"Unit4",ipaParts:[{"part": "t", "ipa": "/t/"}, {"part": "w", "ipa": "/w/"}, {"part": "o", "ipa": "/uː/"}]},
+  {word:"three",phonetic:"/θriː/",cn:"三",spell:"th-r-ee",module:"Unit4",ipaParts:[{"part": "th", "ipa": "/θ/"}, {"part": "r", "ipa": "/r/"}, {"part": "ee", "ipa": "/iː/"}]},
+  {word:"four",phonetic:"/fɔː/",cn:"四",spell:"f-our",module:"Unit4",ipaParts:[{"part": "f", "ipa": "/f/"}, {"part": "our", "ipa": "/ɔː/"}]},
+  {word:"five",phonetic:"/faɪv/",cn:"五",spell:"f-i-ve",module:"Unit4",ipaParts:[{"part": "f", "ipa": "/faɪ/"}, {"part": "ve", "ipa": "/v/"}]},
+  {word:"six",phonetic:"/sɪks/",cn:"六",spell:"s-i-x",module:"Unit4",ipaParts:[{"part": "s", "ipa": "/s/"}, {"part": "i", "ipa": "/ɪ/"}, {"part": "x", "ipa": "/ks/"}]},
+  {word:"seven",phonetic:"/'sevn/",cn:"七",spell:"se-ven",module:"Unit4",ipaParts:[{"part": "se", "ipa": "/se/"}, {"part": "ven", "ipa": "/vn/"}]},
+  {word:"eight",phonetic:"/eɪt/",cn:"八",spell:"eigh-t",module:"Unit4",ipaParts:[{"part": "eigh", "ipa": "/eɪ/"}, {"part": "t", "ipa": "/t/"}]},
+  {word:"ten",phonetic:"/ten/",cn:"十",spell:"t-e-n",module:"Unit4",ipaParts:[{"part": "t", "ipa": "/t/"}, {"part": "e", "ipa": "/e/"}, {"part": "n", "ipa": "/n/"}]},
+  {word:"eleven",phonetic:"/ɪ'levn/",cn:"十一",spell:"e-le-ven",module:"Unit4",ipaParts:[{"part": "e", "ipa": "/ɪ/"}, {"part": "le", "ipa": "/lev/"}, {"part": "ven", "ipa": "/vn/"}]},
+  {word:"twelve",phonetic:"/twelv/",cn:"十二",spell:"twe-lve",module:"Unit4",ipaParts:[{"part": "twe", "ipa": "/twel/"}, {"part": "ve", "ipa": "/v/"}]},
+  {word:"rope",phonetic:"/rəʊp/",cn:"绳",spell:"r-o-pe",module:"Unit4",ipaParts:[{"part": "r", "ipa": "/r/"}, {"part": "o", "ipa": "/əʊ/"}, {"part": "pe", "ipa": "/p/"}]},
+  {word:"who",phonetic:"/huː/",cn:"谁，什么人",spell:"wh-o",module:"Unit4",ipaParts:[{"part": "wh", "ipa": "/h/"}, {"part": "o", "ipa": "/uː/"}]},
+  {word:"make",phonetic:"/meɪk/",cn:"制作",spell:"m-a-ke",module:"Unit4",ipaParts:[{"part": "m", "ipa": "/meɪ/"}, {"part": "ke", "ipa": "/k/"}]},
+  {word:"Chinese knot",phonetic:"/tʃaɪ'niːz nɒt/",cn:"中国结",spell:"Chi-nese knot",module:"Unit4",ipaParts:[{"part": "Chi", "ipa": "/tʃaɪ/"}, {"part": "nese", "ipa": "/niːz/"}, {"part": "knot", "ipa": "/nɒt/"}]},
+  {word:"beautiful",phonetic:"/'bjuːtɪfl/",cn:"美丽的",spell:"beau-ti-ful",module:"Unit4",ipaParts:[{"part": "beau", "ipa": "/ˈbjuː/"}, {"part": "ti", "ipa": "/tɪ/"}, {"part": "ful", "ipa": "/fl/"}]},
+  {word:"only",phonetic:"/'əʊnli/",cn:"仅仅",spell:"o-n-ly",module:"Unit4",ipaParts:[{"part": "o", "ipa": "/ˈəʊ/"}, {"part": "n", "ipa": "/n/"}, {"part": "ly", "ipa": "/li/"}]},
+  {word:"show",phonetic:"/ʃəʊ/",cn:"给……看",spell:"sh-ow",module:"Unit4",ipaParts:[{"part": "sh", "ipa": "/ʃ/"}, {"part": "ow", "ipa": "/əʊ/"}]},
+  {word:"baby",phonetic:"/'beɪbi/",cn:"幼崽；雏鸟",spell:"ba-by",module:"Unit4",ipaParts:[{"part": "ba", "ipa": "/ˈbeɪ/"}, {"part": "by", "ipa": "/bi/"}]},
+  {word:"cheep",phonetic:"/tʃiːp/",cn:"吱吱（或唧唧）的叫声",spell:"ch-ee-p",module:"Unit4",ipaParts:[{"part": "ch", "ipa": "/tʃ/"}, {"part": "ee", "ipa": "/iː/"}, {"part": "p", "ipa": "/p/"}]},
+  {word:"egg",phonetic:"/eɡ/",cn:"蛋",spell:"e-gg",module:"Unit4",ipaParts:[{"part": "e", "ipa": "/e/"}, {"part": "gg", "ipa": "/g/"}]},
+  {word:"hungry",phonetic:"/'hʌŋɡri/",cn:"饥饿的",spell:"hun-gry",module:"Unit4",ipaParts:[{"part": "hun", "ipa": "/ˈhʌŋ/"}, {"part": "gry", "ipa": "/ɡri/"}]},
+  {word:"around",phonetic:"/ə'raʊnd/",cn:"环绕，在（……）周围",spell:"a-round",module:"Unit4",ipaParts:[{"part": "a", "ipa": "/ə/"}, {"part": "round", "ipa": "/raʊnd/"}]},
+  {word:"all",phonetic:"/ɔːl/",cn:"全部，所有",spell:"all",module:"Unit4",ipaParts:[{"part": "all", "ipa": "/ɔːl/"}]},
+  {word:"all around",phonetic:"/ɔːl ə'raʊnd/",cn:"处处，到处",spell:"all a-round",module:"Unit4",ipaParts:[{"part": "all", "ipa": "/ɔːl/"}, {"part": "around", "ipa": "/əˈraʊnd/"}]},
+  {word:"family",phonetic:"/'fæməli/",cn:"家庭；家人",spell:"fa-mi-ly",module:"Unit5",ipaParts:[{"part": "fa", "ipa": "/ˈfæ/"}, {"part": "mi", "ipa": "/mɪ/"}, {"part": "ly", "ipa": "/li/"}]},
+  {word:"dad",phonetic:"/dæd/",cn:"爸爸",spell:"d-a-d",module:"Unit5",ipaParts:[{"part": "d", "ipa": "/d/"}, {"part": "a", "ipa": "/æ/"}, {"part": "d", "ipa": "/d/"}]},
+  {word:"mum",phonetic:"/mʌm/",cn:"妈妈",spell:"m-u-m",module:"Unit5",ipaParts:[{"part": "m", "ipa": "/m/"}, {"part": "u", "ipa": "/ʌ/"}, {"part": "m", "ipa": "/m/"}]},
+  {word:"brother",phonetic:"/'brʌðə/",cn:"哥哥；弟弟",spell:"bro-ther",module:"Unit5",ipaParts:[{"part": "br", "ipa": "/br/"}, {"part": "o", "ipa": "/ʌ/"}, {"part": "ther", "ipa": "/ðə/"}]},
+  {word:"sister",phonetic:"/'sɪstə/",cn:"姐姐；妹妹",spell:"sis-ter",module:"Unit5",ipaParts:[{"part": "sis", "ipa": "/ˈsɪs/"}, {"part": "ter", "ipa": "/tə/"}]},
+  {word:"grandpa",phonetic:"/'ɡrænpɑː/",cn:"祖父；外祖父",spell:"grand-pa",module:"Unit5",ipaParts:[{"part": "grand", "ipa": "/ɡræn/"}, {"part": "pa", "ipa": "/pɑː/"}]},
+  {word:"grandma",phonetic:"/'ɡrænmɑː/",cn:"祖母；外祖母",spell:"grand-ma",module:"Unit5",ipaParts:[{"part": "grand", "ipa": "/ɡræn/"}, {"part": "ma", "ipa": "/mɑː/"}]},
+  {word:"but",phonetic:"/bʌt/",cn:"但是，然而",spell:"b-u-t",module:"Unit5",ipaParts:[{"part": "b", "ipa": "/b/"}, {"part": "u", "ipa": "/ʌ/"}, {"part": "t", "ipa": "/t/"}]},
+  {word:"people",phonetic:"/'piːpl/",cn:"人；人们",spell:"peo-ple",module:"Unit5",ipaParts:[{"part": "peo", "ipa": "/ˈpiː/"}, {"part": "ple", "ipa": "/pl/"}]},
+  {word:"story",phonetic:"/'stɔːri/",cn:"故事",spell:"st-o-ry",module:"Unit5",ipaParts:[{"part": "st", "ipa": "/st/"}, {"part": "o", "ipa": "/ɔː/"}, {"part": "ry", "ipa": "/ri/"}]},
+  {word:"cap",phonetic:"/kæp/",cn:"帽子",spell:"c-a-p",module:"Unit5",ipaParts:[{"part": "c", "ipa": "/k/"}, {"part": "a", "ipa": "/æ/"}, {"part": "p", "ipa": "/p/"}]},
+  {word:"worry",phonetic:"/'wʌri/",cn:"担心",spell:"wor-ry",module:"Unit5",ipaParts:[{"part": "wor", "ipa": "/ˈwʌ/"}, {"part": "ry", "ipa": "/ri/"}]},
+  {word:"on",phonetic:"/ɒn/",cn:"在……上面",spell:"o-n",module:"Unit5",ipaParts:[{"part": "o", "ipa": "/ɒ/"}, {"part": "n", "ipa": "/n/"}]},
+  {word:"come on",phonetic:"/kʌm ɒn/",cn:"快点；加油",spell:"come on",module:"Unit5",ipaParts:[{"part": "come", "ipa": "/kʌm/"}, {"part": "on", "ipa": " /ɒn/"}]},
+  {word:"photo",phonetic:"/'fəʊtəʊ/",cn:"照片，相片",spell:"pho-to",module:"Unit5",ipaParts:[{"part": "ph", "ipa": "/f/"}, {"part": "o", "ipa": "/əʊ/"}, {"part": "to", "ipa": "/təʊ/"}]},
+  {word:"love",phonetic:"/lʌv/",cn:"爱，关爱",spell:"l-o-ve",module:"Unit5",ipaParts:[{"part": "l", "ipa": "/l/"}, {"part": "o", "ipa": "/ʌ/"}, {"part": "ve", "ipa": "/v/"}]},
+  {word:"daddy",phonetic:"/'dædi/",cn:"爸爸",spell:"da-ddy",module:"Unit5",ipaParts:[{"part": "da", "ipa": "/ˈdæ/"}, {"part": "ddy", "ipa": "/di/"}]},
+  {word:"mummy",phonetic:"/'mʌmi/",cn:"妈妈",spell:"mu-mmy",module:"Unit5",ipaParts:[{"part": "mu", "ipa": "/ˈmʌ/"}, {"part": "mmy", "ipa": "/mi/"}]},
+  {word:"where",phonetic:"/weə/",cn:"在哪里",spell:"wh-ere",module:"Unit5",ipaParts:[{"part": "wh", "ipa": "/w/"}, {"part": "ere", "ipa": "/eə/"}]},
+  {word:"dog",phonetic:"/dɒɡ/",cn:"狗",spell:"d-o-g",module:"Unit5",ipaParts:[{"part": "d", "ipa": "/d/"}, {"part": "o", "ipa": "/ɒ/"}, {"part": "g", "ipa": "/g/"}]},
+  {word:"box",phonetic:"/bɒks/",cn:"盒；箱",spell:"b-o-x",module:"Unit5",ipaParts:[{"part": "b", "ipa": "/b/"}, {"part": "o", "ipa": "/ɒ/"}, {"part": "x", "ipa": "/ks/"}]},
+  {word:"sweet",phonetic:"/swiːt/",cn:"甜蜜的",spell:"sw-ee-t",module:"Unit6",ipaParts:[{"part": "sw", "ipa": "/sw/"}, {"part": "ee", "ipa": "/iː/"}, {"part": "t", "ipa": "/t/"}]},
+  {word:"home",phonetic:"/həʊm/",cn:"家",spell:"h-o-me",module:"Unit6",ipaParts:[{"part": "h", "ipa": "/h/"}, {"part": "o", "ipa": "/əʊ/"}, {"part": "me", "ipa": "/m/"}]},
+  {word:"game",phonetic:"/ɡeɪm/",cn:"游戏",spell:"g-a-me",module:"Unit6",ipaParts:[{"part": "g", "ipa": "/ɡ/"}, {"part": "a", "ipa": "/eɪ/"}, {"part": "me", "ipa": "/m/"}]},
+  {word:"room",phonetic:"/ruːm/",cn:"房间",spell:"r-oo-m",module:"Unit6",ipaParts:[{"part": "r", "ipa": "/r/"}, {"part": "oo", "ipa": "/uː/"}, {"part": "m", "ipa": "/m/"}]},
+  {word:"living room",phonetic:"/'lɪvɪŋ ruːm/",cn:"客厅",spell:"li-ving room",module:"Unit6",ipaParts:[{"part": "li", "ipa": "/ˈlɪ/"}, {"part": "ving", "ipa": "/vɪŋ/"}, {"part": "room", "ipa": "/ruːm/"}]},
+  {word:"bedroom",phonetic:"/'bedruːm/",cn:"卧室",spell:"bed-room",module:"Unit6",ipaParts:[{"part": "bed", "ipa": "/bed/"}, {"part": "room", "ipa": "/ruːm/"}]},
+  {word:"bathroom",phonetic:"/'bɑːθruːm/",cn:"浴室，卫生间",spell:"bath-room",module:"Unit6",ipaParts:[{"part": "bath", "ipa": "/bɑːθ/"}, {"part": "room", "ipa": "/ruːm/"}]},
+  {word:"kitchen",phonetic:"/'kɪtʃɪn/",cn:"厨房",spell:"ki-tchen",module:"Unit6",ipaParts:[{"part": "ki", "ipa": "/kɪ/"}, {"part": "tchen", "ipa": "/tʃɪn/"}]},
+  {word:"dining room",phonetic:"/'daɪnɪŋ ruːm/",cn:"餐厅",spell:"di-ning room",module:"Unit6",ipaParts:[{"part": "di", "ipa": "/ˈdaɪ/"}, {"part": "ning", "ipa": "/nɪŋ/"}, {"part": "room", "ipa": "/ruːm/"}]},
+  {word:"door",phonetic:"/dɔː/",cn:"门",spell:"d-oor",module:"Unit6",ipaParts:[{"part": "d", "ipa": "/d/"}, {"part": "oor", "ipa": "/ɔː/"}]},
+  {word:"chair",phonetic:"/tʃeə/",cn:"椅子",spell:"ch-air",module:"Unit6",ipaParts:[{"part": "ch", "ipa": "/tʃ/"}, {"part": "air", "ipa": "/eə/"}]},
+  {word:"think",phonetic:"/θɪŋk/",cn:"想，认为",spell:"th-i-nk",module:"Unit6",ipaParts:[{"part": "th", "ipa": "/θ/"}, {"part": "i", "ipa": "/ɪ/"}, {"part": "nk", "ipa": "/ŋk/"}]},
+  {word:"under",phonetic:"/'ʌndə/",cn:"在……下面；在……底下",spell:"un-der",module:"Unit6",ipaParts:[{"part": "un", "ipa": "/ˈʌn/"}, {"part": "der", "ipa": "/də/"}]},
+  {word:"bed",phonetic:"/bed/",cn:"床",spell:"b-e-d",module:"Unit6",ipaParts:[{"part": "b", "ipa": "/b/"}, {"part": "e", "ipa": "/e/"}, {"part": "d", "ipa": "/d/"}]},
+  {word:"toy",phonetic:"/tɔɪ/",cn:"玩具",spell:"t-oy",module:"Unit6",ipaParts:[{"part": "t", "ipa": "/t/"}, {"part": "oy", "ipa": "/ɔɪ/"}]},
+  {word:"miaow",phonetic:"/mi'aʊ/",cn:"咪，喵（猫叫声）",spell:"mi-aow",module:"Unit6",ipaParts:[{"part": "mi", "ipa": "/mi/"}, {"part": "aow", "ipa": "/aʊ/"}]},
+  {word:"table",phonetic:"/'teɪbl/",cn:"桌子",spell:"ta-ble",module:"Unit6",ipaParts:[{"part": "ta", "ipa": "/ˈteɪ/"}, {"part": "ble", "ipa": "/bl/"}]},
+  {word:"cat",phonetic:"/kæt/",cn:"猫",spell:"c-a-t",module:"Unit6",ipaParts:[{"part": "c", "ipa": "/k/"}, {"part": "a", "ipa": "/æ/"}, {"part": "t", "ipa": "/t/"}]},
+  {word:"ball",phonetic:"/bɔːl/",cn:"球",spell:"b-all",module:"Unit6",ipaParts:[{"part": "b", "ipa": "/b/"}, {"part": "all", "ipa": "/ɔːl/"}]},
+  {word:"their",phonetic:"/ðeə/",cn:"他们的",spell:"th-eir",module:"Unit6",ipaParts:[{"part": "th", "ipa": "/ð/"}, {"part": "eir", "ipa": "/eə/"}]},
+  {word:"apple",phonetic:"/'æpl/",cn:"苹果",spell:"a-pple",module:"Unit6",ipaParts:[{"part": "a", "ipa": "/ˈæ/"}, {"part": "pple", "ipa": "/pl/"}]},
+  {word:"share",phonetic:"/ʃeə/",cn:"共用；分享",spell:"sh-are",module:"Unit6",ipaParts:[{"part": "sh", "ipa": "/ʃ/"}, {"part": "are", "ipa": "/eə/"}]},
+  {word:"put",phonetic:"/pʊt/",cn:"放",spell:"p-u-t",module:"Unit6",ipaParts:[{"part": "p", "ipa": "/p/"}, {"part": "u", "ipa": "/ʊ/"}, {"part": "t", "ipa": "/t/"}]},
+  {word:"cooking",phonetic:"/'kʊkɪŋ/",cn:"做饭",spell:"co-o-king",module:"Unit6",ipaParts:[{"part": "co", "ipa": "/ˈkʊ/"}, {"part": "king", "ipa": "/kɪŋ/"}]},
+  {word:"sun",phonetic:"/sʌn/",cn:"太阳",spell:"s-u-n",module:"Unit6",ipaParts:[{"part": "s", "ipa": "/s/"}, {"part": "u", "ipa": "/ʌ/"}, {"part": "n", "ipa": "/n/"}]},
+  {word:"like",phonetic:"/laɪk/",cn:"喜欢",spell:"l-i-ke",module:"Unit6",ipaParts:[{"part": "l", "ipa": "/l/"}, {"part": "i", "ipa": "/aɪ/"}, {"part": "ke", "ipa": "/k/"}]},
+  {word:"run",phonetic:"/rʌn/",cn:"跑",spell:"r-u-n",module:"Unit6",ipaParts:[{"part": "r", "ipa": "/r/"}, {"part": "u", "ipa": "/ʌ/"}, {"part": "n", "ipa": "/n/"}]},
+  {word:"lucky",phonetic:"/'lʌki/",cn:"幸运的",spell:"lu-cky",module:"Unit6",ipaParts:[{"part": "lu", "ipa": "/ˈlʌ/"}, {"part": "cky", "ipa": "/ki/"}]}
 ];
 
 function getDailyWords(){
@@ -1387,9 +1389,24 @@ function renderWordCheckin(){
     html+='<div style="text-align:right;"><span class="tag tag-orange">'+w.module+'</span>';
     if(isDone)html+='<div style="font-size:11px;color:#4CAF50;margin-top:4px;">✓ 已打卡</div>';
     html+='</div></div>';
-    html+='<div style="background:#FFF8E1;border-radius:8px;padding:8px 12px;margin-bottom:8px;">';
-    html+='<span style="font-size:11px;color:#E65100;font-weight:600;">🔤 拼读：</span>';
-    html+='<span style="font-size:14px;font-weight:700;color:#3D2B2B;letter-spacing:1px;">'+w.spell+'</span>';
+    /* 拼读+音标对应 */
+    html+='<div style="background:linear-gradient(135deg,#FFFDE7,#FFF8E1);border-radius:10px;padding:10px 12px;margin-bottom:8px;border:1px solid #FFE0B2;">';
+    html+='<div style="font-size:11px;color:#E65100;font-weight:700;margin-bottom:6px;">🔤 自然拼读 · 音标对照</div>';
+    if(w.ipaParts&&w.ipaParts.length>0){
+      html+='<div style="display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;">';
+      for(var pi=0;pi<w.ipaParts.length;pi++){
+        var pp=w.ipaParts[pi];
+        var ipaColor=pp.ipa&&pp.ipa!=='-'?'#1565C0':'#9E9E9E';
+        html+='<div style="display:inline-flex;align-items:center;gap:2px;background:#fff;border-radius:6px;padding:3px 8px;box-shadow:0 1px 2px rgba(0,0,0,0.06);">';
+        html+='<span style="font-size:15px;font-weight:700;color:#E65100;">'+pp.part+'</span>';
+        html+='<span style="font-size:11px;color:'+ipaColor+';font-weight:600;margin-left:2px;">'+pp.ipa+'</span>';
+        html+='</div>';
+        if(pi<w.ipaParts.length-1)html+='<span style="color:#BDBDBD;font-size:12px;">·</span>';
+      }
+      html+='</div>';
+    }else{
+      html+='<span style="font-size:14px;font-weight:700;color:#3D2B2B;">'+w.spell+'</span>';
+    }
     html+='</div>';
     html+='<div style="display:flex;gap:6px;">';
     html+='<button class="btn btn-sm btn-outline" style="font-size:11px;height:30px;" onclick="playWordAudio(\''+w.word+'\',\''+w.phonetic.replace(/'/g,"\\'")+'\')">🔊 发音</button>';
@@ -1416,6 +1433,162 @@ function refreshWords(){
   var area=document.getElementById("wordCheckinArea");
   if(area)area.innerHTML=renderWordCheckin();
   toast("已刷新单词");
+}
+
+/* ===== 国际音标打卡 (48个音标) ===== */
+var PHONEME_BANK=[
+  /* === 20个元音 === */
+  /* 单元音(12) */
+  {ipa:"/iː/",type:"元音",subtype:"前元音",desc:"长衣音",example:"sheep /ʃiːp/",cn:"长i，嘴角向两边咧开",color:"#E91E63"},
+  {ipa:"/ɪ/",type:"元音",subtype:"前元音",desc:"短衣音",example:"ship /ʃɪp/",cn:"短i，嘴唇放松",color:"#E91E63"},
+  {ipa:"/e/",type:"元音",subtype:"前元音",desc:"短e音",example:"bed /bed/",cn:"嘴巴半开，舌前部抬起",color:"#E91E63"},
+  {ipa:"/æ/",type:"元音",subtype:"前元音",desc:"梅花音",example:"cat /kæt/",cn:"嘴巴张大，扁唇",color:"#E91E63"},
+  {ipa:"/ɑː/",type:"元音",subtype:"后元音",desc:"长a音",example:"car /kɑː/",cn:"口张大，舌头放低",color:"#9C27B0"},
+  {ipa:"/ɒ/",type:"元音",subtype:"后元音",desc:"短o音",example:"hot /hɒt/",cn:"圆唇，口稍开",color:"#9C27B0"},
+  {ipa:"/ɔː/",type:"元音",subtype:"后元音",desc:"长o音",example:"door /dɔː/",cn:"双唇收圆突出",color:"#9C27B0"},
+  {ipa:"/ʊ/",type:"元音",subtype:"后元音",desc:"短u音",example:"book /bʊk/",cn:"嘴唇收圆但不太紧",color:"#9C27B0"},
+  {ipa:"/uː/",type:"元音",subtype:"后元音",desc:"长u音",example:"food /fuːd/",cn:"嘴唇收圆向前突出",color:"#9C27B0"},
+  {ipa:"/ʌ/",type:"元音",subtype:"中元音",desc:"短a音",example:"cup /kʌp/",cn:"嘴自然张开，舌中部抬起",color:"#FF5722"},
+  {ipa:"/ɜː/",type:"元音",subtype:"中元音",desc:"长卷舌音",example:"bird /bɜːd/",cn:"舌身平放，舌尖不接触下齿",color:"#FF5722"},
+  {ipa:"/ə/",type:"元音",subtype:"中元音",desc:" schwa (弱读)",example:"about /əˈbaʊt/",cn:"最常见弱读音，嘴微张",color:"#FF5722"},
+  /* 双元音(8) */
+  {ipa:"/eɪ/",type:"元音",subtype:"双元音",desc:"ei滑音",example:"day /deɪ/",cn:/e/滑向/ɪ/，像说'诶-伊'",color:"#F44336"},
+  {ipa:"/aɪ/",type:"元音",subtype:"双元音",desc:"ai滑音",example:"my /maɪ/",cn:/a/滑向/ɪ/，大开口到合",color:"#F44336"},
+  {ipa:"/ɔɪ/",type:"元音",subtype:"双元音",desc:"oi滑音",example:"boy /bɔɪ/",cn:/ɔ/滑向/ɪ/，圆唇到展唇",color:"#F44336"},
+  {ipa:"/əʊ/",type:"元音",subtype:"双元音",desc:"ou滑音",example:"go /ɡəʊ/",cn:/ə/滑向/ʊ/，雪梨老师最爱",color:"#F44336"},
+  {ipa:"/aʊ/",type:"元音",subtype:"双元音",desc:"au滑音",example:"now /naʊ/",cn:/a/滑向/ʊ/，大开口到圆唇",color:"#F44336"},
+  {ipa:"/eə/",type:"元音",subtype:"双元音",desc:"ea滑音",example:"where /weə/",cn:/e/滑向/ə/",color:"#F44336"},
+  {ipa:"/ɪə/",type:"元音",subtype:"双元音",desc:"ia滑音",example:"here /hɪə/",cn:/ɪ/滑向/ə/",color:"#F44336"},
+  {ipa:"/ʊə/",type:"元音",subtype:"双元音",desc:"ua滑音",example:"pure /pjʊə/",cn:/ʊ/滑向/ə/",color:"#F44336"},
+  /* === 28个辅音 === */
+  /* 爆破音(6) */
+  {ipa:"/p/",type:"辅音",subtype:"爆破音",desc:"清双唇爆破",example:"pen /pen/",cn:"双唇紧闭突然放开，不振动声带",color:"#2196F3"},
+  {ipa:"/b/",type:"辅音",subtype:"爆破音",desc:"浊双唇爆破",example:"bag /bæɡ/",cn:"同上+振动声带",color:"#2196F3"},
+  {ipa:"/t/",type:"辅音",subtype:"爆破音",desc:"清齿龈爆破",example:"ten /ten/",cn:"舌尖抵上齿龈突然放开",color:"#2196F3"},
+  {ipa:"/d/",type:"辅音",subtype:"爆破音",desc:"浊齿龈爆破",example:"dog /dɒɡ/",cn:"同上+振动声带",color:"#2196F3"},
+  {ipa:"/k/",type:"辅音",subtype:"爆破音",desc:"清软腭爆破",example:"cat /kæt/",cn:"舌后部抵软腭突然放开",color:"#2196F3"},
+  {ipa:"/g/",type:"辅音",subtype:"爆破音",desc:"浊软腭爆破",example:"go /ɡəʊ/",cn:"同上+振动声带",color:"#2196F3"},
+  /* 摩擦音(10) */
+  {ipa:"/f/",type:"辅音",subtype:"摩擦音",desc:"清唇齿摩擦",example:"five /faɪv/",cn:"上齿轻触下唇吹气",color:"#00BCD4"},
+  {ipa:"/v/",type:"辅音",subtype:"摩擦音",desc:"浊唇齿摩擦",example:"very /ˈveri/",cn:"同上+振动声带",color:"#00BCD4"},
+  {ipa:"/θ/",type:"辅音",subtype:"摩擦音",desc:"清齿间摩擦(th)",example:"think /θɪŋk/",cn:"舌尖轻触上下齿之间吹气（咬舌）",color:"#00BCD4"},
+  {ipa:"/ð/",type:"辅音",subtype:"摩擦音",desc:"浊齿间摩擦(th)",example:"this /ðɪs/",cn:"同上+振动声带",color:"#00BCD4"},
+  {ipa:"/s/",type:"辅音",subtype:"摩擦音",desc:"清齿龈摩擦",example:"see /siː/",cn:"舌尖靠近齿龈缝吹气（丝丝声）",color:"#00BCD4"},
+  {ipa:"/z/",type:"辅音",subtype:"摩擦音",desc:"浊齿龈摩擦",example:"zoo /zuː/",cn:"同上+振动声带（滋滋声）",color:"#00BCD4"},
+  {ipa:"/ʃ/",type:"辅音",subtype:"摩擦音",desc:"清硬腭摩擦(sh)",example:"she /ʃiː/",cn:"舌尖接近硬腭（嘘~）",color:"#00BCD4"},
+  {ipa:"/ʒ/",type:"辅音",subtype:"摩擦音",desc:"浊硬腭摩擦",example:"vision /ˈvɪʒn/",cn:"同上+振动声带",color:"#00BCD4"},
+  {ipa:"/h/",type:"辅音",subtype:"摩擦音",desc:"清声门摩擦",example:"he /hiː/",cn:"气流从声门通过（哈气声）",color:"#00BCD4"},
+  {ipa:"/r/",type:"辅音",subtype:"摩擦音",desc:"近音/半元音(r)",example:"red /red/",cn:"舌尖向后卷起（儿化音）",color:"#00BCD4"},
+  /* 塞擦音(6) */
+  {ipa:"/tʃ/",type:"辅音",subtype:"塞擦音",desc:"清硬腭塞擦(ch)",example:"chair /tʃeə/",cn:"先堵后擦=ch音",color:"#4CAF50"},
+  {ipa:"/dʒ/",type:"辅音",subtype:"塞擦音",desc:"浊硬腭塞擦(j)",example:"job /dʒɒb/",cn:"同上+振动声带",color:"#4CAF50"},
+  {ipa:"/tr/",type:"辅音",subtype:"塞擦音",desc:"清齿龈塞擦(tr)",example:"tree /triː/",cn:"tr组合音",color:"#4CAF50"},
+  {ipa:"/dr/",type:"辅音",subtype:"塞擦音",desc:"浊齿龈塞擦(dr)",example:"drink /drɪŋk/",cn:"dr组合音",color:"#4CAF50"},
+  {ipa:"/ts/",type:"辅音",subtype:"塞擦音",desc:"清齿龈塞擦(ts)",example:"cats /kæts/",cn:"ts组合音",color:"#4CAF50"},
+  {ipa:"/dz/",type:"辅音",subtype:"塞擦音",desc:"浊齿龈塞擦(dz)",example:"beds /bedz/",cn:"dz组合音",color:"#4CAF50"},
+  /* 鼻音(3) */
+  {ipa:"/m/",type:"辅音",subtype:"鼻音",desc:"双唇鼻音",example:"mom /mɒm/",cn:"双唇闭拢气流从鼻腔出（嗯~）",color:"#795548"},
+  {ipa:"/n/",type:"辅音",subtype:"鼻音",desc:"齿龈鼻音",example:"no /nəʊ/",cn:"舌尖抵上齿龈，气流从鼻腔出",color:"#795548"},
+  {ipa:"/ŋ/",type:"辅音",subtype:"鼻音",desc:"软腭鼻音(ng)",example:"sing /sɪŋ/",cn:"舌后部抵软腭，气流从鼻腔出（后鼻音）",color:"#795548"},
+  /* 边音(1) */
+  {ipa:"/l/",type:"辅音",subtype:"边音",desc:"齿龈边音",example:"let /let/",cn:"舌尖抵上齿龈，气流从两侧出",color:"#607D8B"},
+  /* 半元音(2) */
+  {ipa:"/w/",type:"辅音",subtype:"半元音",desc:"唇软腭半元音",example:"we /wiː/",cn:"类似u的快速滑过（呜音）",color:"#9C27B0"},
+  {ipa:"/j/",type:"辅音",subtype:"半元音",desc:"硬腭半元音",example:"yes /jes/",cn:"类似i的快速滑过（耶音）",color:"#9C27B0"}
+];
+
+var PHONEME_DAILY_COUNT=6; /* 每日练习6个音标 */
+
+function getDailyPhonemes(){
+  var today=todayKey();
+  var stored=Store.get("dailyPhonemes",{});
+  if(stored.date===today&&stored.phonemes&&stored.phonemes.length===PHONEME_DAILY_COUNT)return stored.phonemes;
+  var indices=[];
+  var total=PHONEME_BANK.length;
+  var seed=Math.floor(Date.now()/86400000)+12345; /* 和单词错开种子 */
+  function sr(){seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;}
+  while(indices.length<PHONEME_DAILY_COUNT){
+    var idx=Math.floor(sr()*total);
+    if(indices.indexOf(idx)===-1)indices.push(idx);
+  }
+  var phos=[];
+  for(var i=0;i<indices.length;i++)phos.push(PHONEME_BANK[indices[i]]);
+  Store.set("dailyPhonemes",{date:today,phonemes:phos});
+  return phos;
+}
+
+function renderPhonemeCheckin(){
+  var phos=getDailyPhonemes();
+  var checked=Store.get("phonemeChecked",[]);
+  var td=todayKey();
+  var todayChecked=[];
+  for(var i=0;i<checked.length;i++){if(checked[i].date===td)todayChecked.push(checked[i].ipa);}
+  var progress=todayChecked.length;
+  var html='<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">';
+  html+='<div style="flex:1;height:6px;background:#E8F5E9;border-radius:3px;overflow:hidden;"><div style="width:'+(progress/PHONEME_DAILY_COUNT*100)+'%;height:100%;background:linear-gradient(90deg,#4CAF50,#81C784);border-radius:3px;"></div></div>';
+  html+='<span style="font-size:12px;color:#2E7D00;font-weight:600;">'+progress+'/'+PHONEME_DAILY_COUNT+'</span></div>';
+
+  for(var i=0;i<phos.length;i++){
+    var p=phos[i],isDone=false;
+    for(var j=0;j<todayChecked.length;j++){if(todayChecked[j]===p.ipa)isDone=true;}
+    html+='<div class="word-card'+(isDone?' word-done':'')+'" id="pc_'+i+'" style="background:'+(isDone?'#E8F5E9':'#fff')+';border-radius:12px;padding:12px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,0.05);border:1.5px solid '+(isDone?'#A5D6A7':'#BBDEFB')+';">';
+    html+='<div style="display:flex;justify-content:space-between;align-items:center;">';
+    html+='<div style="display:flex;align-items:center;gap:10px;">';
+    /* 音标大字 */
+    html+='<div style="font-size:28px;font-weight:700;color:'+p.color+';min-width:60px;text-align:center;background:linear-gradient(135deg,'+p.color+'15,'+p.color+'08);border-radius:10px;padding:8px 12px;">'+p.ipa+'</div>';
+    /* 详情 */
+    html+='<div><div style="font-size:13px;font-weight:700;color:#333;">'+p.desc+'</div>';
+    html+='<div style="font-size:11px;color:#666;">'+p.type+' · '+p.subtype+'</div>';
+    html+='<div style="font-size:11px;color:#888;">例：'+p.example+'</div></div></div>';
+    if(isDone)html+='<div style="font-size:20px;">✅</div>';
+    html+='</div>';
+    /* 中文提示 */
+    html+='<div style="font-size:12px;color:#555;margin-top:6px;padding:6px 8px;background:#FAFAFA;border-radius:6px;line-height:1.5;">💡 '+p.cn+'</div>';
+    /* 按钮 */
+    html+='<div style="display:flex;gap:6px;margin-top:8px;">';
+    html+='<button class="btn btn-sm btn-outline" style="font-size:11px;height:30px;" onclick="playPhoneme(\''+p.ipa.replace(/'/g,"\\'")+'\')">🔊 听发音</button>';
+    if(!isDone)html+='<button class="btn btn-sm" style="font-size:11px;height:30px;" onclick="checkPhoneme(\''+p.ipa+'\','+i+')">✅ 认识了</button>';
+    html+='</div></div>';
+  }
+  html+='<button class="btn btn-block btn-sm btn-outline" style="margin-top:8px;font-size:12px;" onclick="refreshPhonemes()">🔄 换一批音标</button>';
+  return html;
+}
+
+function checkPhoneme(ipa,idx){
+  var checked=Store.get("phonemeChecked",[]);
+  var td=todayKey(),found=false;
+  for(var i=0;i<checked.length;i++){if(checked[i].date===td&&checked[i].ipa===ipa){found=true;break;}}
+  if(!found)checked.push({date:td,ipa:ipa,time:Date.now()});
+  Store.set("phonemeChecked",checked);
+  var area=document.getElementById("phonemeCheckinArea");
+  if(area)area.innerHTML=renderPhonemeCheckin();
+  toast("音标打卡成功！🎵");feedPet("english");
+}
+
+function refreshPhonemes(){
+  Store.set("dailyPhonemes",{});
+  var area=document.getElementById("phonemeCheckinArea");
+  if(area)area.innerHTML=renderPhonemeCheckin();
+  toast("已刷新音标");
+}
+
+function playPhoneme(ipa){
+  /* 用包含该音标的简单词来发音 */
+  var examples={"/iː/":"see","/ɪ/":"it","/e/":"bed","/æ/":"cat","/ɑː/":"car","/ɒ/":"hot",
+    "/ɔː/":"all","/ʊ/":"book","/uː/":"too","/ʌ/":"cup","/ɜː/":"bird","/ə/":"about",
+    "/eɪ/":"day","/aɪ/":"my","/ɔɪ/":"boy","/əʊ/":"go","/aʊ/":"now","/eə/":"hair",
+    "/ɪə/":"here","/ʊə/":"sure","/p/":"pen","/b/":"big","/t/":"top","/d/":"dog",
+    "/k/":"cat","/g/":"go","/f/":"fun","/v/":"very","/θ/":"think","/ð/":"this",
+    "/s/":"sun","/z/":"zoo","/ʃ/":"she","/ʒ/":"measure","/h/":"hello","/r/":"red",
+    "/tʃ/":"chair","/dʒ/":"job","/tr/":"tree","/dr/":"drink","/ts/":"cats","/dz/":"beds",
+    "/m/":"mom","/n/":"no","/ŋ/":"sing","/l/":"let","/w/":"we","/j/":"yes"};
+  var word=examples[ipa]||"sound";
+  if(window.speechSynthesis){
+    var u=new SpeechSynthesisUtterance(word);
+    u.lang="en-US";u.rate=0.6;
+    window.speechSynthesis.cancel();window.speechSynthesis.speak(u);
+  }
+  toast("🔊 "+ipa+" → "+word);
 }
 
 function playWordAudio(word,phonetic){
