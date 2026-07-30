@@ -1391,15 +1391,19 @@ function renderWordCheckin(){
     html+='</div></div>';
     /* 拼读+音标对应 */
     html+='<div style="background:linear-gradient(135deg,#FFFDE7,#FFF8E1);border-radius:10px;padding:10px 12px;margin-bottom:8px;border:1px solid #FFE0B2;">';
-    html+='<div style="font-size:11px;color:#E65100;font-weight:700;margin-bottom:6px;">🔤 自然拼读 · 音标对照</div>';
+    html+='<div style="font-size:11px;color:#E65100;font-weight:700;margin-bottom:6px;">🔤 自然拼读 · 音标对照（点音标可听发音）</div>';
     if(w.ipaParts&&w.ipaParts.length>0){
-      html+='<div style="display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;">';
+      html+='<div style="display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;">';
       for(var pi=0;pi<w.ipaParts.length;pi++){
         var pp=w.ipaParts[pi];
         var ipaColor=pp.ipa&&pp.ipa!=='-'?'#1565C0':'#9E9E9E';
-        html+='<div style="display:inline-flex;align-items:center;gap:2px;background:#fff;border-radius:6px;padding:3px 8px;box-shadow:0 1px 2px rgba(0,0,0,0.06);">';
+        var hasAudio=pp.ipa&&pp.ipa!=='-'&&PHONEME_AUDIO[pp.ipa];
+        var chipAttr=hasAudio?('onclick="playPhoneme(\''+pp.ipa.replace(/'/g,"\\'")+'\')"'):'';
+        var chipStyle='display:inline-flex;align-items:center;gap:3px;background:#fff;border-radius:8px;padding:4px 9px;box-shadow:0 1px 3px rgba(0,0,0,0.08);'+(hasAudio?'cursor:pointer;border:1.5px solid #90CAF9;':'border:1px solid #eee;');
+        html+='<div '+chipAttr+' style="'+chipStyle+'">';
         html+='<span style="font-size:15px;font-weight:700;color:#E65100;">'+pp.part+'</span>';
         html+='<span style="font-size:11px;color:'+ipaColor+';font-weight:600;margin-left:2px;">'+pp.ipa+'</span>';
+        if(hasAudio)html+='<span style="font-size:10px;margin-left:2px;">🔊</span>';
         html+='</div>';
         if(pi<w.ipaParts.length-1)html+='<span style="color:#BDBDBD;font-size:12px;">·</span>';
       }
@@ -1497,6 +1501,34 @@ var PHONEME_BANK=[
   {ipa:"/j/",type:"辅音",subtype:"半元音",desc:"硬腭半元音",example:"yes /jes/",cn:"类似i的快速滑过（耶音）",color:"#9C27B0"}
 ];
 
+/* 48个音标的孤立发音音频(本地预生成mp3，托管于 audio/ 同域名，手机可直接加载) */
+var PHONEME_AUDIO={
+"/iː/":"audio/p00.mp3","/ɪ/":"audio/p01.mp3","/e/":"audio/p02.mp3","/æ/":"audio/p03.mp3",
+"/ɑː/":"audio/p04.mp3","/ɒ/":"audio/p05.mp3","/ɔː/":"audio/p06.mp3","/ʊ/":"audio/p07.mp3",
+"/uː/":"audio/p08.mp3","/ʌ/":"audio/p09.mp3","/ɜː/":"audio/p10.mp3","/ə/":"audio/p11.mp3",
+"/eɪ/":"audio/p12.mp3","/aɪ/":"audio/p13.mp3","/ɔɪ/":"audio/p14.mp3","/əʊ/":"audio/p15.mp3",
+"/aʊ/":"audio/p16.mp3","/eə/":"audio/p17.mp3","/ɪə/":"audio/p18.mp3","/ʊə/":"audio/p19.mp3",
+"/p/":"audio/p20.mp3","/b/":"audio/p21.mp3","/t/":"audio/p22.mp3","/d/":"audio/p23.mp3",
+"/k/":"audio/p24.mp3","/g/":"audio/p25.mp3","/f/":"audio/p26.mp3","/v/":"audio/p27.mp3",
+"/θ/":"audio/p28.mp3","/ð/":"audio/p29.mp3","/s/":"audio/p30.mp3","/z/":"audio/p31.mp3",
+"/ʃ/":"audio/p32.mp3","/ʒ/":"audio/p33.mp3","/h/":"audio/p34.mp3","/r/":"audio/p35.mp3",
+"/tʃ/":"audio/p36.mp3","/dʒ/":"audio/p37.mp3","/tr/":"audio/p38.mp3","/dr/":"audio/p39.mp3",
+"/ts/":"audio/p40.mp3","/dz/":"audio/p41.mp3","/m/":"audio/p42.mp3","/n/":"audio/p43.mp3",
+"/ŋ/":"audio/p44.mp3","/l/":"audio/p45.mp3","/w/":"audio/p46.mp3","/j/":"audio/p47.mp3"
+};
+
+/* 音标 -> 例词(用于TTS兜底) */
+var PHONEME_EXAMPLE={
+"/iː/":"see","/ɪ/":"it","/e/":"bed","/æ/":"cat","/ɑː/":"car","/ɒ/":"hot",
+"/ɔː/":"all","/ʊ/":"book","/uː/":"too","/ʌ/":"cup","/ɜː/":"bird","/ə/":"about",
+"/eɪ/":"day","/aɪ/":"my","/ɔɪ/":"boy","/əʊ/":"go","/aʊ/":"now","/eə/":"hair",
+"/ɪə/":"here","/ʊə/":"sure","/p/":"pen","/b/":"big","/t/":"top","/d/":"dog",
+"/k/":"cat","/g/":"go","/f/":"fun","/v/":"very","/θ/":"think","/ð/":"this",
+"/s/":"sun","/z/":"zoo","/ʃ/":"she","/ʒ/":"measure","/h/":"hello","/r/":"red",
+"/tʃ/":"chair","/dʒ/":"job","/tr/":"tree","/dr/":"drink","/ts/":"cats","/dz/":"beds",
+"/m/":"mom","/n/":"no","/ŋ/":"sing","/l/":"let","/w/":"we","/j/":"yes"
+};
+
 var PHONEME_DAILY_COUNT=6; /* 每日练习6个音标 */
 
 function getDailyPhonemes(){
@@ -1545,8 +1577,9 @@ function renderPhonemeCheckin(){
     /* 中文提示 */
     html+='<div style="font-size:12px;color:#555;margin-top:6px;padding:6px 8px;background:#FAFAFA;border-radius:6px;line-height:1.5;">💡 '+p.cn+'</div>';
     /* 按钮 */
-    html+='<div style="display:flex;gap:6px;margin-top:8px;">';
-    html+='<button class="btn btn-sm btn-outline" style="font-size:11px;height:30px;" onclick="playPhoneme(\''+p.ipa.replace(/'/g,"\\'")+'\')">🔊 听发音</button>';
+    html+='<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;">';
+    html+='<button class="btn btn-sm btn-outline" style="font-size:11px;height:30px;" onclick="playPhoneme(\''+p.ipa.replace(/'/g,"\\'")+'\')">🔊 听音标</button>';
+    html+='<button class="btn btn-sm btn-outline" style="font-size:11px;height:30px;" onclick="playPhonemeWord(\''+p.ipa.replace(/'/g,"\\'")+'\')">🔊 听例词</button>';
     if(!isDone)html+='<button class="btn btn-sm" style="font-size:11px;height:30px;" onclick="checkPhoneme(\''+p.ipa+'\','+i+')">✅ 认识了</button>';
     html+='</div></div>';
   }
@@ -1572,23 +1605,29 @@ function refreshPhonemes(){
   toast("已刷新音标");
 }
 
-function playPhoneme(ipa){
-  /* 用包含该音标的简单词来发音 */
-  var examples={"/iː/":"see","/ɪ/":"it","/e/":"bed","/æ/":"cat","/ɑː/":"car","/ɒ/":"hot",
-    "/ɔː/":"all","/ʊ/":"book","/uː/":"too","/ʌ/":"cup","/ɜː/":"bird","/ə/":"about",
-    "/eɪ/":"day","/aɪ/":"my","/ɔɪ/":"boy","/əʊ/":"go","/aʊ/":"now","/eə/":"hair",
-    "/ɪə/":"here","/ʊə/":"sure","/p/":"pen","/b/":"big","/t/":"top","/d/":"dog",
-    "/k/":"cat","/g/":"go","/f/":"fun","/v/":"very","/θ/":"think","/ð/":"this",
-    "/s/":"sun","/z/":"zoo","/ʃ/":"she","/ʒ/":"measure","/h/":"hello","/r/":"red",
-    "/tʃ/":"chair","/dʒ/":"job","/tr/":"tree","/dr/":"drink","/ts/":"cats","/dz/":"beds",
-    "/m/":"mom","/n/":"no","/ŋ/":"sing","/l/":"let","/w/":"we","/j/":"yes"};
-  var word=examples[ipa]||"sound";
+/* 播放音标本身的孤立发音(预生成音频)，失败则回退到例词TTS */
+var _phonAudio=new Audio();_phonAudio.preload="none";
+function playPhonemeSound(ipa){
+  var url=PHONEME_AUDIO[ipa];
+  if(!url){playPhonemeWord(ipa);return;}
+  _phonAudio.src=url;
+  try{_phonAudio.load();}catch(e){}
+  var pr=_phonAudio.play();
+  if(pr&&pr.catch){pr.catch(function(){playPhonemeWord(ipa);});}
+}
+function playPhonemeWord(ipa){
+  /* 用TTS念含该音标的例词(兜底/辅助) */
+  var word=PHONEME_EXAMPLE[ipa]||"sound";
   if(window.speechSynthesis){
     var u=new SpeechSynthesisUtterance(word);
     u.lang="en-US";u.rate=0.6;
     window.speechSynthesis.cancel();window.speechSynthesis.speak(u);
   }
-  toast("🔊 "+ipa+" → "+word);
+  toast("🔊 例词 "+word);
+}
+function playPhoneme(ipa){
+  playPhonemeSound(ipa);
+  toast("🔊 音标 "+ipa);
 }
 
 function playWordAudio(word,phonetic){
