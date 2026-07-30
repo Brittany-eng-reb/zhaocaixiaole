@@ -1010,6 +1010,9 @@ function rEnglish(ct){
     }
   }
   ct.innerHTML='<div class="stat-grid"><div class="stat-card"><div class="s-num">'+(tm/60).toFixed(1)+'h</div><div class="s-label">累计学习</div></div><div class="stat-card"><div class="s-num">'+tdm+'min</div><div class="s-label">今日学习</div></div><div class="stat-card"><div class="s-num">'+(ls.length+mediaRecs.length)+'</div><div class="s-label">记录条数</div></div><div class="stat-card"><div class="s-num">'+uDays+'</div><div class="s-label">学习天数</div></div>'+
+    '<!-- 单词打卡 -->'+
+    '<div class="card" style="background:linear-gradient(135deg,#FFF8E1,#FFECB3);"><div class="card-title" style="color:#E65100;"><span style="font-size:18px;">📖</span> 外研版三上 · 每日单词打卡</div><div style="font-size:12px;color:#5D4037;margin-bottom:12px;">孙友忠主编 · 三年级起点 · 三年级上册单词表</div><div id="wordCheckinArea">'+renderWordCheckin()+'</div></div>'+
+    '<!-- 语音/视频打卡 -->'+
     '<div class="recorder-section"><div class="card-title"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" stroke-width="2"/></svg>🎤 语音/视频打卡</div>'+
     '<div style="font-size:12px;color:var(--text-sub);margin-bottom:10px;">跟着雪梨老师学音标/自然拼读，录下你的发音，随时回听复习！</div>'+
     '<div class="recorder-type-switch"><div class="recorder-type-btn active" id="rtAudio" onclick="switchRecType(\'audio\')">🎤 语音录制</div><div class="recorder-type-btn" id="rtVideo" onclick="switchRecType(\'video\')">📹 视频录制</div></div>'+
@@ -1137,6 +1140,293 @@ function saveEng(){
   var ls=Store.get("englishLogs",[]);
   ls.push({date:todayKey(),item:it,minutes:Number(m),note:n,created:Date.now()});
   Store.set("englishLogs",ls);navigateTo("english");toast("已记录");feedPet("english");
+}
+
+/* ===== 单词打卡数据 ===== */
+var WORD_BANK=[
+  {word:"welcome",phonetic:"/welkəm/",cn:"欢迎",spell:"wel-come",module:"Welcome"},
+  {word:"to",phonetic:"/tuː/",cn:"用于动词、名词或形容词后，使意思完整；向，到，往",spell:"t-o",module:"Welcome"},
+  {word:"school",phonetic:"/skuːl/",cn:"学校",spell:"s-ch-ool",module:"Welcome"},
+  {word:"hi",phonetic:"/haɪ/",cn:"嘿，喂，你好",spell:"hi",module:"Welcome"},
+  {word:"I",phonetic:"/aɪ/",cn:"我",spell:"I",module:"Welcome"},
+  {word:"be",phonetic:"/biː/",cn:"是",spell:"b-e",module:"Welcome"},
+  {word:"what",phonetic:"/wɒt/",cn:"什么",spell:"wh-at",module:"Welcome"},
+  {word:"your",phonetic:"/jɔː/",cn:"你的；你们的",spell:"y-our",module:"Welcome"},
+  {word:"name",phonetic:"/neɪm/",cn:"名字",spell:"n-a-me",module:"Welcome"},
+  {word:"hello",phonetic:"/hə'ləʊ/",cn:"喂，哈啰，你好",spell:"he-llo",module:"Welcome"},
+  {word:"my",phonetic:"/maɪ/",cn:"我的",spell:"m-y",module:"Welcome"},
+  {word:"goodbye",phonetic:"/ɡʊd'baɪ/",cn:"再见",spell:"good-bye",module:"Welcome"},
+  {word:"have",phonetic:"/hæv/",cn:"有，拥有",spell:"h-a-ve",module:"Welcome"},
+  {word:"a",phonetic:"/ə/",cn:"一（个）",spell:"a",module:"Welcome"},
+  {word:"nice",phonetic:"/naɪs/",cn:"令人愉快的",spell:"n-i-ce",module:"Welcome"},
+  {word:"day",phonetic:"/deɪ/",cn:"一天",spell:"d-ay",module:"Welcome"},
+  {word:"good",phonetic:"/ɡʊd/",cn:"好的",spell:"g-oo-d",module:"Welcome"},
+  {word:"morning",phonetic:"/'mɔːnɪŋ/",cn:"早晨，上午",spell:"mor-ning",module:"Welcome"},
+  {word:"Ms",phonetic:"/mɪz/",cn:"女士",spell:"M-s",module:"Welcome"},
+  {word:"stand",phonetic:"/stænd/",cn:"站立",spell:"st-a-nd",module:"Welcome"},
+  {word:"sit",phonetic:"/sɪt/",cn:"坐",spell:"s-i-t",module:"Welcome"},
+  {word:"open",phonetic:"/'əʊpən/",cn:"打开",spell:"o-pen",module:"Welcome"},
+  {word:"book",phonetic:"/bʊk/",cn:"书",spell:"b-oo-k",module:"Welcome"},
+  {word:"close",phonetic:"/kləʊz/",cn:"合上",spell:"cl-o-se",module:"Welcome"},
+  {word:"point",phonetic:"/pɔɪnt/",cn:"指",spell:"p-oi-nt",module:"Welcome"},
+  {word:"say",phonetic:"/seɪ/",cn:"说",spell:"s-ay",module:"Welcome"},
+  {word:"read",phonetic:"/riːd/",cn:"阅读",spell:"r-ea-d",module:"Welcome"},
+  {word:"listen",phonetic:"/'lɪsn/",cn:"听",spell:"li-sten",module:"Welcome"},
+  {word:"write",phonetic:"/raɪt/",cn:"写",spell:"wr-i-te",module:"Welcome"},
+  {word:"play",phonetic:"/pleɪ/",cn:"玩，玩耍",spell:"pl-ay",module:"Welcome"},
+  {word:"happy",phonetic:"/'hæpi/",cn:"高兴的，快乐的",spell:"ha-ppy",module:"Welcome"},
+  {word:"new",phonetic:"/njuː/",cn:"新的",spell:"n-ew",module:"Welcome"},
+  {word:"do",phonetic:"/duː/",cn:"构成疑问句或否定句；做",spell:"d-o",module:"Welcome"},
+  {word:"they",phonetic:"/ðeɪ/",cn:"他们",spell:"th-ey",module:"Welcome"},
+  {word:"everyone",phonetic:"/'evriwʌn/",cn:"每个人，人人",spell:"e-very-one",module:"Welcome"},
+  {word:"nine",phonetic:"/naɪn/",cn:"九",spell:"n-i-ne",module:"Welcome"},
+  {word:"she",phonetic:"/ʃiː/",cn:"她",spell:"sh-e",module:"Welcome"},
+  {word:"too",phonetic:"/tuː/",cn:"也",spell:"t-oo",module:"Welcome"},
+  {word:"we",phonetic:"/wiː/",cn:"我们",spell:"w-e",module:"Welcome"},
+  {word:"from",phonetic:"/frɒm/",cn:"从",spell:"fr-om",module:"Welcome"},
+  {word:"the",phonetic:"/ðə/",cn:"用于表示正在谈论一个已经提到过、已经知道，或是唯一存在的人或物",spell:"th-e",module:"Welcome"},
+  {word:"twin",phonetic:"/twɪn/",cn:"双胞胎中的一个",spell:"tw-i-n",module:"Welcome"},
+  {word:"he",phonetic:"/hiː/",cn:"他",spell:"h-e",module:"Welcome"},
+  {word:"come",phonetic:"/kʌm/",cn:"来；来到",spell:"c-o-me",module:"Welcome"},
+  {word:"and",phonetic:"/ænd/",cn:"然后，接着；和",spell:"a-nd",module:"Welcome"},
+  {word:"oh",phonetic:"/əʊ/",cn:"噢",spell:"oh",module:"Welcome"},
+  {word:"no",phonetic:"/nəʊ/",cn:"不，不行",spell:"n-o",module:"Welcome"},
+  {word:"help",phonetic:"/help/",cn:"帮助，帮忙",spell:"h-e-lp",module:"Welcome"},
+  {word:"here",phonetic:"/hɪə/",cn:"在这里",spell:"h-ere",module:"Welcome"},
+  {word:"thank",phonetic:"/θæŋk/",cn:"感谢，向……表示谢意",spell:"th-ank",module:"Welcome"},
+  {word:"together",phonetic:"/tə'ɡeðə/",cn:"一起，一块儿",spell:"to-ge-ther",module:"Welcome"},
+  {word:"OK",phonetic:"/əʊ'keɪ/",cn:"行，可以",spell:"O-K",module:"Welcome"},
+  {word:"great",phonetic:"/ɡreɪt/",cn:"极棒的，极好的",spell:"gr-ea-t",module:"Welcome"},
+  {word:"song",phonetic:"/sɒŋ/",cn:"歌曲",spell:"s-o-ng",module:"Welcome"},
+  {word:"dear",phonetic:"/dɪə/",cn:"亲爱的",spell:"d-ear",module:"Welcome"},
+  {word:"sing",phonetic:"/sɪŋ/",cn:"唱，歌唱",spell:"s-i-ng",module:"Welcome"},
+  {word:"now",phonetic:"/naʊ/",cn:"现在",spell:"n-ow",module:"Welcome"},
+  {word:"know",phonetic:"/nəʊ/",cn:"认识；知道，了解",spell:"kn-ow",module:"Welcome"},
+  {word:"our",phonetic:"/'aʊə/",cn:"我们的",spell:"ou-r",module:"Welcome"},
+  {word:"everybody",phonetic:"/'evribɒdi/",cn:"每个人，人人",spell:"e-very-bo-dy",module:"Welcome"},
+  {word:"with",phonetic:"/wɪð/",cn:"和……一起",spell:"w-i-th",module:"Welcome"},
+  {word:"me",phonetic:"/miː/",cn:"我",spell:"m-e",module:"Welcome"},
+  {word:"let's",phonetic:"/lets/",cn:"让我们",spell:"let's",module:"Unit1"},
+  {word:"friend",phonetic:"/frend/",cn:"朋友",spell:"f-ri-end",module:"Unit1"},
+  {word:"meet",phonetic:"/miːt/",cn:"认识，结识",spell:"m-ee-t",module:"Unit1"},
+  {word:"you",phonetic:"/juː/",cn:"你；你们",spell:"y-ou",module:"Unit1"},
+  {word:"pen",phonetic:"/pen/",cn:"钢笔",spell:"p-e-n",module:"Unit1"},
+  {word:"pencil",phonetic:"/'pensl/",cn:"铅笔",spell:"pen-cil",module:"Unit1"},
+  {word:"pencil case",phonetic:"/'pensl keɪs/",cn:"笔袋；铅笔盒",spell:"pen-cil case",module:"Unit1"},
+  {word:"bag",phonetic:"/bæɡ/",cn:"袋；包",spell:"b-a-g",module:"Unit1"},
+  {word:"for",phonetic:"/fɔː/",cn:"为了",spell:"f-or",module:"Unit1"},
+  {word:"ruler",phonetic:"/'ruːlə/",cn:"尺子，直尺",spell:"r-u-ler",module:"Unit1"},
+  {word:"eraser",phonetic:"/ɪ'reɪzə/",cn:"橡皮",spell:"e-ra-ser",module:"Unit1"},
+  {word:"this",phonetic:"/ðɪs/",cn:"这，这个",spell:"th-i-s",module:"Unit1"},
+  {word:"in",phonetic:"/ɪn/",cn:"在……里",spell:"i-n",module:"Unit1"},
+  {word:"schoolbag",phonetic:"/'skuːlbæɡ/",cn:"书包",spell:"school-bag",module:"Unit1"},
+  {word:"it",phonetic:"/ɪt/",cn:"它",spell:"i-t",module:"Unit1"},
+  {word:"not",phonetic:"/nɒt/",cn:"不，不是",spell:"n-o-t",module:"Unit1"},
+  {word:"that",phonetic:"/ðæt/",cn:"那，那个",spell:"th-a-t",module:"Unit1"},
+  {word:"yes",phonetic:"/jes/",cn:"是，对",spell:"y-e-s",module:"Unit1"},
+  {word:"guess",phonetic:"/ɡes/",cn:"猜，猜测",spell:"g-u-ess",module:"Unit1"},
+  {word:"find",phonetic:"/faɪnd/",cn:"发现，找到",spell:"f-i-nd",module:"Unit1"},
+  {word:"lost and found",phonetic:"/lɒst ənd faʊnd/",cn:"失物招领",spell:"lost and found",module:"Unit1"},
+  {word:"bye",phonetic:"/baɪ/",cn:"再见，拜拜",spell:"b-ye",module:"Unit1"},
+  {word:"kid",phonetic:"/kɪd/",cn:"小孩，儿童",spell:"k-i-d",module:"Unit1"},
+  {word:"take care of",phonetic:"/teɪk keə ɒv/",cn:"照看（照料）某人/某物",spell:"take care of",module:"Unit1"},
+  {word:"there",phonetic:"/ðeə/",cn:"在那里",spell:"th-ere",module:"Unit1"},
+  {word:"please",phonetic:"/pliːz/",cn:"请",spell:"pl-ea-se",module:"Unit1"},
+  {word:"back",phonetic:"/bæk/",cn:"回到原处",spell:"b-a-ck",module:"Unit1"},
+  {word:"come back",phonetic:"/kʌm bæk/",cn:"回来",spell:"come back",module:"Unit1"},
+  {word:"look",phonetic:"/lʊk/",cn:"看，瞧，望",spell:"l-oo-k",module:"Unit1"},
+  {word:"thing",phonetic:"/θɪŋ/",cn:"东西",spell:"th-i-ng",module:"Unit2"},
+  {word:"pack",phonetic:"/pæk/",cn:"收拾好",spell:"p-a-ck",module:"Unit2"},
+  {word:"colour",phonetic:"/'kʌlə/",cn:"颜色",spell:"c-o-lour",module:"Unit2"},
+  {word:"can",phonetic:"/kæn/",cn:"能，会",spell:"c-a-n",module:"Unit2"},
+  {word:"see",phonetic:"/siː/",cn:"看见，看到",spell:"s-ee",module:"Unit2"},
+  {word:"right",phonetic:"/raɪt/",cn:"正确的，对的",spell:"r-i-ght",module:"Unit2"},
+  {word:"first",phonetic:"/fɜːst/",cn:"第一的",spell:"f-ir-st",module:"Unit2"},
+  {word:"magical",phonetic:"/'mædʒɪkl/",cn:"神奇的；有魔力的",spell:"ma-gi-cal",module:"Unit2"},
+  {word:"fun",phonetic:"/fʌn/",cn:"有趣的，逗乐的",spell:"f-u-n",module:"Unit2"},
+  {word:"black",phonetic:"/blæk/",cn:"黑色（的）",spell:"bl-a-ck",module:"Unit2"},
+  {word:"so",phonetic:"/səʊ/",cn:"这么，如此",spell:"s-o",module:"Unit2"},
+  {word:"many",phonetic:"/'meni/",cn:"许多；大量",spell:"m-a-ny",module:"Unit2"},
+  {word:"picture",phonetic:"/'pɪktʃə/",cn:"画，图画",spell:"pic-tu-re",module:"Unit2"},
+  {word:"today",phonetic:"/tə'deɪ/",cn:"今天",spell:"to-day",module:"Unit2"},
+  {word:"paint",phonetic:"/peɪnt/",cn:"画，作画",spell:"p-ai-nt",module:"Unit2"},
+  {word:"colourful",phonetic:"/'kʌləfl/",cn:"颜色鲜艳的，色彩丰富的",spell:"co-lour-ful",module:"Unit3"},
+  {word:"world",phonetic:"/wɜːld/",cn:"世界",spell:"w-or-ld",module:"Unit3"},
+  {word:"hooray",phonetic:"/hu'reɪ/",cn:"好哇",spell:"hoo-ray",module:"Unit3"},
+  {word:"umbrella",phonetic:"/ʌm'brelə/",cn:"伞；雨伞",spell:"um-bre-lla",module:"Unit3"},
+  {word:"clothes",phonetic:"/kləʊðz/",cn:"衣服",spell:"cl-o-thes",module:"Unit3"},
+  {word:"red",phonetic:"/red/",cn:"红色（的）",spell:"r-e-d",module:"Unit3"},
+  {word:"pink",phonetic:"/pɪŋk/",cn:"粉红色（的）",spell:"p-i-nk",module:"Unit3"},
+  {word:"green",phonetic:"/ɡriːn/",cn:"绿色（的）",spell:"gr-ee-n",module:"Unit3"},
+  {word:"yellow",phonetic:"/'jeləʊ/",cn:"黄色（的）",spell:"y-e-llow",module:"Unit3"},
+  {word:"orange",phonetic:"/'ɒrɪndʒ/",cn:"橙色（的）",spell:"o-ran-ge",module:"Unit3"},
+  {word:"blue",phonetic:"/bluː/",cn:"蓝色（的）",spell:"bl-ue",module:"Unit3"},
+  {word:"purple",phonetic:"/'pɜːpl/",cn:"紫色（的）",spell:"p-ur-ple",module:"Unit3"},
+  {word:"rainbow",phonetic:"/'reɪnbəʊ/",cn:"彩虹",spell:"rain-bow",module:"Unit3"},
+  {word:"want",phonetic:"/wɒnt/",cn:"想要",spell:"w-a-nt",module:"Unit3"},
+  {word:"balloon",phonetic:"/bə'luːn/",cn:"气球",spell:"bal-loon",module:"Unit3"},
+  {word:"big",phonetic:"/bɪɡ/",cn:"大的",spell:"b-i-g",module:"Unit3"},
+  {word:"little",phonetic:"/'lɪtl/",cn:"小的",spell:"li-ttle",module:"Unit3"},
+  {word:"everywhere",phonetic:"/'evriweə/",cn:"在各个地方；处处",spell:"e-very-where",module:"Unit3"},
+  {word:"number",phonetic:"/'nʌmbə/",cn:"数，数字",spell:"num-ber",module:"Unit4"},
+  {word:"count",phonetic:"/kaʊnt/",cn:"数数",spell:"c-ou-nt",module:"Unit4"},
+  {word:"how",phonetic:"/haʊ/",cn:"多少；怎样，如何",spell:"h-ow",module:"Unit4"},
+  {word:"bird",phonetic:"/bɜːd/",cn:"鸟",spell:"b-ir-d",module:"Unit4"},
+  {word:"one",phonetic:"/wʌn/",cn:"一",spell:"o-ne",module:"Unit4"},
+  {word:"two",phonetic:"/tuː/",cn:"二",spell:"t-w-o",module:"Unit4"},
+  {word:"three",phonetic:"/θriː/",cn:"三",spell:"th-r-ee",module:"Unit4"},
+  {word:"four",phonetic:"/fɔː/",cn:"四",spell:"f-our",module:"Unit4"},
+  {word:"five",phonetic:"/faɪv/",cn:"五",spell:"f-i-ve",module:"Unit4"},
+  {word:"six",phonetic:"/sɪks/",cn:"六",spell:"s-i-x",module:"Unit4"},
+  {word:"seven",phonetic:"/'sevn/",cn:"七",spell:"se-ven",module:"Unit4"},
+  {word:"eight",phonetic:"/eɪt/",cn:"八",spell:"eigh-t",module:"Unit4"},
+  {word:"ten",phonetic:"/ten/",cn:"十",spell:"t-e-n",module:"Unit4"},
+  {word:"eleven",phonetic:"/ɪ'levn/",cn:"十一",spell:"e-le-ven",module:"Unit4"},
+  {word:"twelve",phonetic:"/twelv/",cn:"十二",spell:"twe-lve",module:"Unit4"},
+  {word:"rope",phonetic:"/rəʊp/",cn:"绳",spell:"r-o-pe",module:"Unit4"},
+  {word:"who",phonetic:"/huː/",cn:"谁，什么人",spell:"wh-o",module:"Unit4"},
+  {word:"make",phonetic:"/meɪk/",cn:"制作",spell:"m-a-ke",module:"Unit4"},
+  {word:"Chinese knot",phonetic:"/tʃaɪ'niːz nɒt/",cn:"中国结",spell:"Chi-nese knot",module:"Unit4"},
+  {word:"beautiful",phonetic:"/'bjuːtɪfl/",cn:"美丽的",spell:"beau-ti-ful",module:"Unit4"},
+  {word:"only",phonetic:"/'əʊnli/",cn:"仅仅",spell:"o-n-ly",module:"Unit4"},
+  {word:"show",phonetic:"/ʃəʊ/",cn:"给……看",spell:"sh-ow",module:"Unit4"},
+  {word:"baby",phonetic:"/'beɪbi/",cn:"幼崽；雏鸟",spell:"ba-by",module:"Unit4"},
+  {word:"cheep",phonetic:"/tʃiːp/",cn:"吱吱（或唧唧）的叫声",spell:"ch-ee-p",module:"Unit4"},
+  {word:"egg",phonetic:"/eɡ/",cn:"蛋",spell:"e-gg",module:"Unit4"},
+  {word:"hungry",phonetic:"/'hʌŋɡri/",cn:"饥饿的",spell:"hun-gry",module:"Unit4"},
+  {word:"around",phonetic:"/ə'raʊnd/",cn:"环绕，在（……）周围",spell:"a-round",module:"Unit4"},
+  {word:"all",phonetic:"/ɔːl/",cn:"全部，所有",spell:"all",module:"Unit4"},
+  {word:"all around",phonetic:"/ɔːl ə'raʊnd/",cn:"处处，到处",spell:"all a-round",module:"Unit4"},
+  {word:"family",phonetic:"/'fæməli/",cn:"家庭；家人",spell:"fa-mi-ly",module:"Unit5"},
+  {word:"dad",phonetic:"/dæd/",cn:"爸爸",spell:"d-a-d",module:"Unit5"},
+  {word:"mum",phonetic:"/mʌm/",cn:"妈妈",spell:"m-u-m",module:"Unit5"},
+  {word:"brother",phonetic:"/'brʌðə/",cn:"哥哥；弟弟",spell:"bro-ther",module:"Unit5"},
+  {word:"sister",phonetic:"/'sɪstə/",cn:"姐姐；妹妹",spell:"sis-ter",module:"Unit5"},
+  {word:"grandpa",phonetic:"/'ɡrænpɑː/",cn:"祖父；外祖父",spell:"grand-pa",module:"Unit5"},
+  {word:"grandma",phonetic:"/'ɡrænmɑː/",cn:"祖母；外祖母",spell:"grand-ma",module:"Unit5"},
+  {word:"but",phonetic:"/bʌt/",cn:"但是，然而",spell:"b-u-t",module:"Unit5"},
+  {word:"people",phonetic:"/'piːpl/",cn:"人；人们",spell:"peo-ple",module:"Unit5"},
+  {word:"story",phonetic:"/'stɔːri/",cn:"故事",spell:"st-o-ry",module:"Unit5"},
+  {word:"cap",phonetic:"/kæp/",cn:"帽子",spell:"c-a-p",module:"Unit5"},
+  {word:"worry",phonetic:"/'wʌri/",cn:"担心",spell:"wor-ry",module:"Unit5"},
+  {word:"on",phonetic:"/ɒn/",cn:"在……上面",spell:"o-n",module:"Unit5"},
+  {word:"come on",phonetic:"/kʌm ɒn/",cn:"快点；加油",spell:"come on",module:"Unit5"},
+  {word:"photo",phonetic:"/'fəʊtəʊ/",cn:"照片，相片",spell:"pho-to",module:"Unit5"},
+  {word:"love",phonetic:"/lʌv/",cn:"爱，关爱",spell:"l-o-ve",module:"Unit5"},
+  {word:"daddy",phonetic:"/'dædi/",cn:"爸爸",spell:"da-ddy",module:"Unit5"},
+  {word:"mummy",phonetic:"/'mʌmi/",cn:"妈妈",spell:"mu-mmy",module:"Unit5"},
+  {word:"where",phonetic:"/weə/",cn:"在哪里",spell:"wh-ere",module:"Unit5"},
+  {word:"dog",phonetic:"/dɒɡ/",cn:"狗",spell:"d-o-g",module:"Unit5"},
+  {word:"box",phonetic:"/bɒks/",cn:"盒；箱",spell:"b-o-x",module:"Unit5"},
+  {word:"sweet",phonetic:"/swiːt/",cn:"甜蜜的",spell:"sw-ee-t",module:"Unit6"},
+  {word:"home",phonetic:"/həʊm/",cn:"家",spell:"h-o-me",module:"Unit6"},
+  {word:"game",phonetic:"/ɡeɪm/",cn:"游戏",spell:"g-a-me",module:"Unit6"},
+  {word:"room",phonetic:"/ruːm/",cn:"房间",spell:"r-oo-m",module:"Unit6"},
+  {word:"living room",phonetic:"/'lɪvɪŋ ruːm/",cn:"客厅",spell:"li-ving room",module:"Unit6"},
+  {word:"bedroom",phonetic:"/'bedruːm/",cn:"卧室",spell:"bed-room",module:"Unit6"},
+  {word:"bathroom",phonetic:"/'bɑːθruːm/",cn:"浴室，卫生间",spell:"bath-room",module:"Unit6"},
+  {word:"kitchen",phonetic:"/'kɪtʃɪn/",cn:"厨房",spell:"ki-tchen",module:"Unit6"},
+  {word:"dining room",phonetic:"/'daɪnɪŋ ruːm/",cn:"餐厅",spell:"di-ning room",module:"Unit6"},
+  {word:"door",phonetic:"/dɔː/",cn:"门",spell:"d-oor",module:"Unit6"},
+  {word:"chair",phonetic:"/tʃeə/",cn:"椅子",spell:"ch-air",module:"Unit6"},
+  {word:"think",phonetic:"/θɪŋk/",cn:"想，认为",spell:"th-i-nk",module:"Unit6"},
+  {word:"under",phonetic:"/'ʌndə/",cn:"在……下面；在……底下",spell:"un-der",module:"Unit6"},
+  {word:"bed",phonetic:"/bed/",cn:"床",spell:"b-e-d",module:"Unit6"},
+  {word:"toy",phonetic:"/tɔɪ/",cn:"玩具",spell:"t-oy",module:"Unit6"},
+  {word:"miaow",phonetic:"/mi'aʊ/",cn:"咪，喵（猫叫声）",spell:"mi-aow",module:"Unit6"},
+  {word:"table",phonetic:"/'teɪbl/",cn:"桌子",spell:"ta-ble",module:"Unit6"},
+  {word:"cat",phonetic:"/kæt/",cn:"猫",spell:"c-a-t",module:"Unit6"},
+  {word:"ball",phonetic:"/bɔːl/",cn:"球",spell:"b-all",module:"Unit6"},
+  {word:"their",phonetic:"/ðeə/",cn:"他们的",spell:"th-eir",module:"Unit6"},
+  {word:"apple",phonetic:"/'æpl/",cn:"苹果",spell:"a-pple",module:"Unit6"},
+  {word:"share",phonetic:"/ʃeə/",cn:"共用；分享",spell:"sh-are",module:"Unit6"},
+  {word:"put",phonetic:"/pʊt/",cn:"放",spell:"p-u-t",module:"Unit6"},
+  {word:"cooking",phonetic:"/'kʊkɪŋ/",cn:"做饭",spell:"co-o-king",module:"Unit6"},
+  {word:"sun",phonetic:"/sʌn/",cn:"太阳",spell:"s-u-n",module:"Unit6"},
+  {word:"like",phonetic:"/laɪk/",cn:"喜欢",spell:"l-i-ke",module:"Unit6"},
+  {word:"run",phonetic:"/rʌn/",cn:"跑",spell:"r-u-n",module:"Unit6"},
+  {word:"lucky",phonetic:"/'lʌki/",cn:"幸运的",spell:"lu-cky",module:"Unit6"}
+];
+
+function getDailyWords(){
+  var today=todayKey();
+  var stored=Store.get("dailyWords",{});
+  if(stored.date===today&&stored.words&&stored.words.length===5)return stored.words;
+  var indices=[];
+  var total=WORD_BANK.length;
+  var seed=Math.floor(Date.now()/86400000);
+  function seededRand(){seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;}
+  while(indices.length<5){
+    var idx=Math.floor(seededRand()*total);
+    if(indices.indexOf(idx)===-1)indices.push(idx);
+  }
+  var words=[];
+  for(var i=0;i<indices.length;i++)words.push(WORD_BANK[indices[i]]);
+  Store.set("dailyWords",{date:today,words:words});
+  return words;
+}
+
+function renderWordCheckin(){
+  var words=getDailyWords();
+  var checked=Store.get("wordChecked",[]);
+  var td=todayKey();
+  var todayChecked=[];
+  for(var i=0;i<checked.length;i++){if(checked[i].date===td)todayChecked.push(checked[i].word);}
+  var progress=todayChecked.length;
+  var html='<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">';
+  html+='<div style="flex:1;height:6px;background:#FFE0B2;border-radius:3px;overflow:hidden;"><div style="width:'+(progress/5*100)+'%;height:100%;background:linear-gradient(90deg,#FF9800,#FF5722);border-radius:3px;transition:width 0.3s;"></div></div>';
+  html+='<span style="font-size:12px;color:#E65100;font-weight:600;white-space:nowrap;">'+progress+'/5</span></div>';
+  for(var i=0;i<words.length;i++){
+    var w=words[i],isDone=false;
+    for(var j=0;j<todayChecked.length;j++){if(todayChecked[j]===w.word)isDone=true;}
+    html+='<div class="word-card'+(isDone?' word-done':'')+'" id="wc_'+i+'" style="background:'+(isDone?'#E8F5E9':'#fff')+';border-radius:12px;padding:14px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,0.05);border:1.5px solid '+(isDone?'#A5D6A7':'#FFE0B2')+';transition:all 0.3s;">';
+    html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">';
+    html+='<div><div style="font-size:20px;font-weight:700;color:'+(isDone?'#2E7D32':'#E65100')+';">'+w.word+'</div>';
+    html+='<div style="font-size:14px;color:var(--pink-dark);margin:2px 0;">'+w.phonetic+'</div>';
+    html+='<div style="font-size:13px;color:var(--text-sub);">'+w.cn+'</div></div>';
+    html+='<div style="text-align:right;"><span class="tag tag-orange">'+w.module+'</span>';
+    if(isDone)html+='<div style="font-size:11px;color:#4CAF50;margin-top:4px;">✓ 已打卡</div>';
+    html+='</div></div>';
+    html+='<div style="background:#FFF8E1;border-radius:8px;padding:8px 12px;margin-bottom:8px;">';
+    html+='<span style="font-size:11px;color:#E65100;font-weight:600;">🔤 拼读：</span>';
+    html+='<span style="font-size:14px;font-weight:700;color:#3D2B2B;letter-spacing:1px;">'+w.spell+'</span>';
+    html+='</div>';
+    html+='<div style="display:flex;gap:6px;">';
+    html+='<button class="btn btn-sm btn-outline" style="font-size:11px;height:30px;" onclick="playWordAudio(\''+w.word+'\',\''+w.phonetic.replace(/'/g,"\\'")+'\')">🔊 发音</button>';
+    if(!isDone)html+='<button class="btn btn-sm" style="font-size:11px;height:30px;" onclick="checkWord(\''+w.word+'\','+i+')">✅ 打卡</button>';
+    html+='</div></div>';
+  }
+  html+='<button class="btn btn-block btn-sm btn-outline" style="margin-top:8px;font-size:12px;" onclick="refreshWords()">🔄 换一批单词</button>';
+  return html;
+}
+
+function checkWord(word,idx){
+  var checked=Store.get("wordChecked",[]);
+  var td=todayKey(),found=false;
+  for(var i=0;i<checked.length;i++){if(checked[i].date===td&&checked[i].word===word){found=true;break;}}
+  if(!found)checked.push({date:td,word:word,time:Date.now()});
+  Store.set("wordChecked",checked);
+  var area=document.getElementById("wordCheckinArea");
+  if(area)area.innerHTML=renderWordCheckin();
+  toast("单词打卡成功！📖");feedPet("english");
+}
+
+function refreshWords(){
+  Store.set("dailyWords",{});
+  var area=document.getElementById("wordCheckinArea");
+  if(area)area.innerHTML=renderWordCheckin();
+  toast("已刷新单词");
+}
+
+function playWordAudio(word,phonetic){
+  if(window.speechSynthesis){
+    var u=new SpeechSynthesisUtterance(word);
+    u.lang="en-US";u.rate=0.7;u.pitch=1;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+  }
+  var area=document.getElementById("wordCheckinArea");
+  toast("🔊 "+word+" "+phonetic);
 }
 
 /* ===== 阅读 ===== */
