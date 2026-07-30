@@ -312,6 +312,50 @@ textarea{padding:12px 14px;resize:none;min-height:80px;line-height:1.6;}
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
+/* 语音/视频录制 */
+.recorder-section{
+  background:var(--pink-light);border-radius:var(--radius);padding:16px;margin-bottom:12px;
+}
+.recorder-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.recorder-btn{
+  width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:22px;transition:all 0.15s;border:2px solid var(--pink-dark);background:#fff;color:var(--pink-dark);
+}
+.recorder-btn.recording{
+  background:#FF5252;border-color:#FF5252;color:#fff;animation:pulse 1.2s infinite;
+}
+.recorder-btn:active{transform:scale(0.9);}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,82,82,0.4)}50%{box-shadow:0 0 0 12px rgba(255,82,82,0)}}
+.recorder-timer{font-size:16px;font-weight:600;color:var(--pink-dark);min-width:50px;text-align:center;}
+.recorder-timer.recording{color:#FF5252;}
+.recorder-preview{
+  margin-top:12px;border-radius:var(--radius-sm);overflow:hidden;
+  background:#000;min-height:120px;display:flex;align-items:center;justify-content:center;
+}
+.recorder-preview video,.recorder-preview audio{width:100%;max-height:280px;}
+.recorder-preview .placeholder{color:#888;font-size:13px;text-align:center;padding:24px;}
+.recorder-info{font-size:11px;color:var(--text-sub);margin-top:8px;text-align:center;}
+.recorder-type-switch{
+  display:flex;gap:4px;margin-bottom:12px;background:var(--warm-gray);border-radius:10px;padding:3px;
+}
+.recorder-type-btn{
+  flex:1;text-align:center;padding:7px;border-radius:8px;font-size:12px;font-weight:500;
+  color:var(--text-sub);transition:all 0.15s;
+}
+.recorder-type-btn.active{background:#fff;color:var(--pink-dark);box-shadow:0 1px 4px rgba(0,0,0,0.06);}
+
+.media-record-card{
+  background:#fff;border-radius:var(--radius-sm);padding:12px;margin-bottom:8px;box-shadow:var(--shadow);
+}
+.media-record-card .mr-type{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;margin-right:6px;}
+.mr-type-audio{background:#E3F2FD;color:#1565C0;}
+.mr-type-video{background:#FCE4EC;color:#C62828;}
+.media-record-card .mr-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.media-record-card .mr-date{font-size:12px;color:var(--text-light);}
+.media-record-card .mr-item{font-size:13px;font-weight:500;color:var(--pink-dark);margin-bottom:4px;}
+.media-record-card .mr-note{font-size:12px;color:var(--text-sub);margin-bottom:8px;}
+.media-record-card audio,.media-record-card video{width:100%;border-radius:8px;max-height:200px;margin-top:6px;}
+
 .loading-dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--pink-dark);margin:0 2px;animation:bounce 0.6s infinite alternate;}
 .loading-dot:nth-child(2){animation-delay:0.1s;}
 .loading-dot:nth-child(3){animation-delay:0.2s;}
@@ -947,17 +991,148 @@ function rEnglish(ct){
   var ud={};
   for(var i=0;i<ls.length;i++)ud[ls[i].date]=1;
   var uDays=Object.keys(ud).length;
+  var mediaRecs=Store.get("englishMedia",[]);
   var listHtml="";
-  if(ls.length===0)listHtml='<div class="empty-state">还没有记录</div>';
+  if(ls.length===0&&mediaRecs.length===0)listHtml='<div class="empty-state">还没有记录</div>';
   else{
-    for(var i=ls.length-1;i>=0;i--){
-      listHtml+='<div class="card" style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:13px;font-weight:500;">'+ls[i].item+' <span class="tag tag-pink">'+ls[i].minutes+'min</span></div><div style="font-size:11px;color:var(--text-light);">'+ls[i].date+'</div>'+(ls[i].note?'<div style="font-size:12px;color:var(--text-sub);margin-top:4px;">'+ls[i].note+'</div>':"")+'</div></div></div>';
+    var allRecs=[];
+    for(var i=0;i<ls.length;i++)allRecs.push({type:"text",data:ls[i],idx:i});
+    for(var i=0;i<mediaRecs.length;i++)allRecs.push({type:"media",data:mediaRecs[i],idx:i});
+    allRecs.sort(function(a,b){return (b.data.created||0)-(a.data.created||0);});
+    for(var i=0;i<allRecs.length;i++){
+      var r=allRecs[i];
+      if(r.type==="text"){
+        listHtml+='<div class="card" style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:13px;font-weight:500;">'+r.data.item+' <span class="tag tag-pink">'+r.data.minutes+'min</span></div><div style="font-size:11px;color:var(--text-light);">'+r.data.date+'</div>'+(r.data.note?'<div style="font-size:12px;color:var(--text-sub);margin-top:4px;">'+r.data.note+'</div>':"")+'</div></div></div>';
+      } else {
+        var typeLabel=r.data.mediaType==="video"?'<span class="mr-type mr-type-video">📹 视频</span>':'<span class="mr-type mr-type-audio">🎤 语音</span>';
+        listHtml+='<div class="media-record-card"><div class="mr-header"><div><div class="mr-item">'+r.data.item+' <span class="tag tag-pink">'+r.data.minutes+'min</span></div><div style="display:flex;align-items:center;gap:8px;">'+typeLabel+'<span class="mr-date">'+r.data.date+'</span></div></div><button onclick="delEngMedia('+r.idx+')" style="color:var(--text-light);font-size:16px;">×</button></div>'+(r.data.note?'<div class="mr-note">'+r.data.note+'</div>':"")+(r.data.mediaType==="video"?'<video src="'+r.data.blobUrl+'" controls style="width:100%;border-radius:8px;max-height:240px;"></video>':'<audio src="'+r.data.blobUrl+'" controls style="width:100%;"></audio>')+'</div>';
+      }
     }
   }
-  ct.innerHTML='<div class="stat-grid"><div class="stat-card"><div class="s-num">'+(tm/60).toFixed(1)+'h</div><div class="s-label">累计学习</div></div><div class="stat-card"><div class="s-num">'+tdm+'min</div><div class="s-label">今日学习</div></div><div class="stat-card"><div class="s-num">'+ls.length+'</div><div class="s-label">记录条数</div></div><div class="stat-card"><div class="s-num">'+uDays+'</div><div class="s-label">学习天数</div></div></div><div class="card"><div class="card-title"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" fill="none" stroke="currentColor" stroke-width="2"/></svg>记录学习</div><div class="form-group"><label>项目</label><select id="engItem" style="width:100%;height:40px;border-radius:10px;border:1.5px solid var(--warm-gray);padding:0 12px;font-size:13px;background:#fff;"><option value="音标">音标</option><option value="自然拼读">自然拼读</option><option value="课堂口语">课堂口语</option><option value="教案备课">教案备课</option><option value="优质课学习">优质课学习</option><option value="外研版教材培训">外研版教材培训</option><option value="新课标研读">新课标研读</option><option value="英语教学法">英语教学法</option><option value="听力训练">听力训练</option><option value="词汇积累">词汇积累</option><option value="语法专项">语法专项</option><option value="英文阅读">英文阅读</option><option value="TED学习">TED学习</option><option value="英语论文写作">英语论文写作</option><option value="雅思/托福备考">雅思/托福备考</option></select></div><div class="form-group"><label>时长（分钟）</label><input type="number" id="engMin" placeholder="如 30" min="1"></div><div class="form-group"><label>笔记</label><textarea id="engNote" style="min-height:60px;" placeholder="今天学到了什么？"></textarea></div><button class="btn btn-block btn-sm" onclick="saveEng()">保存记录</button></div><div class="section-title"><span class="dot"></span>学习记录</div>'+listHtml;
+  ct.innerHTML='<div class="stat-grid"><div class="stat-card"><div class="s-num">'+(tm/60).toFixed(1)+'h</div><div class="s-label">累计学习</div></div><div class="stat-card"><div class="s-num">'+tdm+'min</div><div class="s-label">今日学习</div></div><div class="stat-card"><div class="s-num">'+(ls.length+mediaRecs.length)+'</div><div class="s-label">记录条数</div></div><div class="stat-card"><div class="s-num">'+uDays+'</div><div class="s-label">学习天数</div></div>'+
+    '<div class="recorder-section"><div class="card-title"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" stroke-width="2"/></svg>🎤 语音/视频打卡</div>'+
+    '<div style="font-size:12px;color:var(--text-sub);margin-bottom:10px;">跟着雪梨老师学音标/自然拼读，录下你的发音，随时回听复习！</div>'+
+    '<div class="recorder-type-switch"><div class="recorder-type-btn active" id="rtAudio" onclick="switchRecType(\'audio\')">🎤 语音录制</div><div class="recorder-type-btn" id="rtVideo" onclick="switchRecType(\'video\')">📹 视频录制</div></div>'+
+    '<div id="recorderArea"><div class="recorder-controls"><button class="recorder-btn" id="recBtn" onclick="toggleRec()">🎤</button><span class="recorder-timer" id="recTimer">00:00</span><span id="recStatus" style="font-size:12px;color:var(--text-sub);">点击开始录制</span></div><div class="recorder-preview" id="recPreview"><div class="placeholder">录制完成后这里可预览</div></div></div>'+
+    '<div class="form-group" style="margin-top:12px;"><label>学习项目</label><select id="engItem" style="width:100%;height:40px;border-radius:10px;border:1.5px solid var(--warm-gray);padding:0 12px;font-size:13px;background:#fff;"><option value="音标">音标</option><option value="自然拼读">自然拼读</option><option value="课堂口语">课堂口语</option><option value="教案备课">教案备课</option><option value="优质课学习">优质课学习</option><option value="外研版教材培训">外研版教材培训</option><option value="新课标研读">新课标研读</option><option value="英语教学法">英语教学法</option><option value="听力训练">听力训练</option><option value="词汇积累">词汇积累</option><option value="语法专项">语法专项</option><option value="英文阅读">英文阅读</option><option value="TED学习">TED学习</option><option value="英语论文写作">英语论文写作</option><option value="雅思/托福备考">雅思/托福备考</option></select></div>'+
+    '<div class="form-group"><label>练习时长（分钟）</label><input type="number" id="engMin" placeholder="如 15" min="1"></div>'+
+    '<div class="form-group"><label>练习内容/笔记（如：跟读/iː/ /ɪ/ 音标，雪梨老师第3课）</label><textarea id="engNote" style="min-height:50px;" placeholder="记录了方便以后复习..."></textarea></div>'+
+    '<button class="btn btn-block btn-sm" onclick="saveEngMedia()" id="saveEngBtn">💾 保存打卡记录</button>'+
+    '<p style="font-size:11px;color:var(--text-light);text-align:center;margin-top:6px;">录制语音或视频后，填写信息点击保存。所有媒体存储在手机本地。</p></div>'+
+    '<div class="card"><div class="card-title"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" fill="none" stroke="currentColor" stroke-width="2"/></svg>纯文字记录</div><div class="form-group"><label>项目</label><select id="engItem2" style="width:100%;height:40px;border-radius:10px;border:1.5px solid var(--warm-gray);padding:0 12px;font-size:13px;background:#fff;"><option value="音标">音标</option><option value="自然拼读">自然拼读</option><option value="课堂口语">课堂口语</option><option value="教案备课">教案备课</option><option value="优质课学习">优质课学习</option><option value="外研版教材培训">外研版教材培训</option><option value="新课标研读">新课标研读</option><option value="英语教学法">英语教学法</option><option value="听力训练">听力训练</option><option value="词汇积累">词汇积累</option><option value="语法专项">语法专项</option><option value="英文阅读">英文阅读</option><option value="TED学习">TED学习</option><option value="英语论文写作">英语论文写作</option><option value="雅思/托福备考">雅思/托福备考</option></select></div><div class="form-group"><label>时长（分钟）</label><input type="number" id="engMin2" placeholder="如 30" min="1"></div><div class="form-group"><label>笔记</label><textarea id="engNote2" style="min-height:60px;" placeholder="今天学到了什么？"></textarea></div><button class="btn btn-block btn-sm" onclick="saveEng()">保存文字记录</button></div>'+
+    '<div class="section-title"><span class="dot"></span>全部记录</div>'+listHtml;
 }
+
+var recMediaRecorder=null,recStream=null,recType="audio",recBlob=null,recBlobUrl=null,recSeconds=0,recInterval=null;
+
+function switchRecType(type){
+  recType=type;
+  document.getElementById("rtAudio").classList.toggle("active",type==="audio");
+  document.getElementById("rtVideo").classList.toggle("active",type==="video");
+  var btn=document.getElementById("recBtn");
+  btn.textContent=type==="audio"?"🎤":"📹";
+  if(recMediaRecorder&&recMediaRecorder.state==="recording"){
+    stopRec();
+  }
+  var preview=document.getElementById("recPreview");
+  preview.innerHTML='<div class="placeholder">切换模式，点击开始录制</div>';
+  recBlob=null;recBlobUrl=null;
+  document.getElementById("recTimer").textContent="00:00";
+  document.getElementById("recTimer").classList.remove("recording");
+  document.getElementById("recStatus").textContent="点击开始录制";
+}
+
+async function toggleRec(){
+  if(recMediaRecorder&&recMediaRecorder.state==="recording"){
+    stopRec();return;
+  }
+  try{
+    var constraints=recType==="video"?{video:{facingMode:"user",width:{ideal:640},height:{ideal:480}},audio:true}:{audio:true};
+    recStream=await navigator.mediaDevices.getUserMedia(constraints);
+    var mimeType=recType==="video"?"video/webm;codecs=vp8,opus":"audio/webm;codecs=opus";
+    recMediaRecorder=new MediaRecorder(recStream,{mimeType:mimeType});
+    var chunks=[];
+    recMediaRecorder.ondataavailable=function(e){if(e.data.size>0)chunks.push(e.data);};
+    recMediaRecorder.onstop=function(){
+      var blobMime=recType==="video"?"video/webm":"audio/webm";
+      recBlob=new Blob(chunks,{type:blobMime});
+      if(recBlobUrl)URL.revokeObjectURL(recBlobUrl);
+      recBlobUrl=URL.createObjectURL(recBlob);
+      var preview=document.getElementById("recPreview");
+      if(recType==="video"){
+        preview.innerHTML='<video src="'+recBlobUrl+'" controls style="width:100%;max-height:280px;"></video>';
+      } else {
+        preview.innerHTML='<audio src="'+recBlobUrl+'" controls style="width:100%;"></audio><div class="recorder-info">🔊 点击播放试听</div>';
+      }
+      document.getElementById("recStatus").textContent="✅ 录制完成 · 点击保存";
+      document.getElementById("recStatus").style.color="#4CAF50";
+      document.getElementById("saveEngBtn").style.opacity="1";
+      if(recStream){recStream.getTracks().forEach(function(t){t.stop();});recStream=null;}
+    };
+    recMediaRecorder.start();
+    document.getElementById("recBtn").classList.add("recording");
+    document.getElementById("recTimer").classList.add("recording");
+    document.getElementById("recStatus").textContent="录制中...";
+    document.getElementById("recStatus").style.color="#FF5252";
+    document.getElementById("saveEngBtn").style.opacity="0.6";
+    recSeconds=0;
+    updateRecTimer();
+    recInterval=setInterval(updateRecTimer,1000);
+  }catch(e){
+    toast("无法访问麦克风/摄像头："+(e.message||"请检查权限"));
+  }
+}
+
+function updateRecTimer(){
+  recSeconds++;
+  var m=Math.floor(recSeconds/60),s=recSeconds%60;
+  document.getElementById("recTimer").textContent=(m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+}
+
+function stopRec(){
+  if(recInterval){clearInterval(recInterval);recInterval=null;}
+  if(recMediaRecorder&&recMediaRecorder.state==="recording")recMediaRecorder.stop();
+  document.getElementById("recBtn").classList.remove("recording");
+  document.getElementById("recTimer").classList.remove("recording");
+}
+
+function saveEngMedia(){
+  var it=document.getElementById("engItem").value,m=document.getElementById("engMin").value,n=document.getElementById("engNote").value.trim();
+  if(!recBlob||!recBlobUrl){toast("请先录制语音或视频");return;}
+  if(!m||m<=0){toast("请输入练习时长");return;}
+  var reader=new FileReader();
+  reader.onload=function(){
+    var recs=Store.get("englishMedia",[]);
+    recs.push({
+      date:todayKey(),item:it,minutes:Number(m),note:n,
+      mediaType:recType,blobUrl:recBlobUrl,blobBase64:reader.result,
+      created:Date.now()
+    });
+    Store.set("englishMedia",recs);
+    recBlob=null;recBlobUrl=null;
+    document.getElementById("recPreview").innerHTML='<div class="placeholder">录制完成后这里可预览</div>';
+    document.getElementById("recTimer").textContent="00:00";
+    document.getElementById("recTimer").classList.remove("recording");
+    document.getElementById("recStatus").textContent="点击开始录制";
+    document.getElementById("recStatus").style.color="var(--text-sub)";
+    document.getElementById("saveEngBtn").style.opacity="1";
+    navigateTo("english");toast("打卡成功！🎉");feedPet("english");
+  };
+  reader.readAsDataURL(recBlob);
+}
+
+function delEngMedia(i){
+  var recs=Store.get("englishMedia",[]);
+  if(i>=0&&i<recs.length){
+    if(recs[i].blobUrl)URL.revokeObjectURL(recs[i].blobUrl);
+    recs.splice(i,1);
+    Store.set("englishMedia",recs);
+    navigateTo("english");toast("已删除");
+  }
+}
+
 function saveEng(){
-  var it=$("engItem").value,m=$("engMin").value,n=$("engNote").value.trim();
+  var it=document.getElementById("engItem2").value,m=document.getElementById("engMin2").value,n=document.getElementById("engNote2").value.trim();
   if(!m||m<=0){toast("请输入时长");return;}
   var ls=Store.get("englishLogs",[]);
   ls.push({date:todayKey(),item:it,minutes:Number(m),note:n,created:Date.now()});
